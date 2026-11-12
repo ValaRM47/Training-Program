@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0c0e" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f2f2ef" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Training for Climbing">
+<title>Training for Climbing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<style>
+:root{
+  --bg:#f2f2ef; --surface:#ffffff; --surface-2:#f7f7f4; --line:rgba(16,18,22,.09); --line-strong:rgba(16,18,22,.16);
+  --text:#14161a; --muted:#5b5e66; --faint:#8a8d94;
+  --gold:#8a6831; --gold-soft:rgba(138,104,49,.10); --gold-line:rgba(138,104,49,.35); --on-gold:#ffffff;
+  --done-bg:rgba(138,104,49,.06);
+  --shadow:0 1px 2px rgba(20,18,12,.04),0 8px 28px rgba(20,18,12,.06);
+  --glass:rgba(242,242,239,.78);
+  --r:16px; --r-sm:10px;
+  --ease:cubic-bezier(.16,1,.3,1);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b0c0e; --surface:#131519; --surface-2:#181b20; --line:rgba(255,255,255,.07); --line-strong:rgba(255,255,255,.13);
+    --text:#ecebe6; --muted:#a2a4aa; --faint:#72757c;
+    --gold:#d5b885; --gold-soft:rgba(213,184,133,.10); --gold-line:rgba(213,184,133,.32); --on-gold:#17130b;
+    --done-bg:rgba(213,184,133,.045);
+    --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 10px 30px rgba(0,0,0,.35);
+    --glass:rgba(11,12,14,.72);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b0c0e; --surface:#131519; --surface-2:#181b20; --line:rgba(255,255,255,.07); --line-strong:rgba(255,255,255,.13);
+  --text:#ecebe6; --muted:#a2a4aa; --faint:#72757c;
+  --gold:#d5b885; --gold-soft:rgba(213,184,133,.10); --gold-line:rgba(213,184,133,.32); --on-gold:#17130b;
+  --done-bg:rgba(213,184,133,.045);
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 10px 30px rgba(0,0,0,.35);
+  --glass:rgba(11,12,14,.72);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:140px}
+body{background:var(--bg);color:var(--text);font:400 16px/1.55 "Geist",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;min-height:100dvh;overflow-x:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mono{font-family:"Geist Mono",ui-monospace,monospace;font-feature-settings:"tnum"}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px}
+
+/* Header */
+header.top{padding:calc(env(safe-area-inset-top) + 28px) 0 22px}
+.top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+h1{font-size:clamp(2rem,6vw,2.9rem);font-weight:600;letter-spacing:-.035em;line-height:1.02}
+.sub{color:var(--muted);margin-top:8px;font-size:.95rem;max-width:44ch}
+.icon-btns{display:flex;gap:6px;flex-shrink:0}
+.ibtn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:var(--surface);color:var(--muted);transition:color .2s,border-color .2s,transform .12s var(--ease)}
+.ibtn:hover{color:var(--text);border-color:var(--line-strong)}
+.ibtn:active{transform:scale(.94)}
+.ibtn i{font-size:19px}
+.rpe-btn{width:auto;padding:0 14px;border-radius:99px;color:var(--gold);border-color:var(--gold-line);font-size:.8rem;font-weight:500;letter-spacing:.04em}
+.rpe-btn:hover{color:var(--gold);border-color:var(--gold)}
+.rpe-scale{display:grid;gap:6px;margin-top:18px}
+.rpe-row{display:grid;grid-template-columns:52px 104px 1fr;gap:12px;align-items:center;padding:11px 14px;border-radius:12px;background:var(--surface-2)}
+.rpe-row b{font-family:"Geist Mono",monospace;font-weight:500;font-size:.92rem;color:var(--gold)}
+.rpe-row strong{font-weight:600;font-size:.9rem;color:var(--text)}
+.rpe-row span{font-size:.88rem;color:var(--muted);line-height:1.4}
+.rpe-bar{height:4px;border-radius:4px;background:var(--line-strong);margin-top:6px;overflow:hidden}
+.rpe-bar i{display:block;height:100%;background:var(--gold)}
+@media (max-width:480px){.rpe-row{grid-template-columns:44px 1fr}.rpe-row span{grid-column:2}}
+button.chip{font:inherit;font-size:.76rem;cursor:pointer}
+button.chip:hover{border-color:var(--gold)}
+.gate{margin-top:12px;display:flex;gap:10px;align-items:flex-start;font-size:.88rem;color:var(--muted);line-height:1.45}
+.gate i{color:var(--gold);font-size:17px;margin-top:1px;flex-shrink:0}
+
+.stats{margin-top:26px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;padding:18px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow)}
+.ring{position:relative;width:88px;height:88px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:6}
+.ring .trk{stroke:var(--line-strong)}
+.ring .val{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .6s var(--ease)}
+.ring .pct{position:absolute;inset:0;display:grid;place-items:center;font-size:1.2rem;font-weight:500;letter-spacing:-.02em}
+.stat-list{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat b{display:block;font-size:1.35rem;font-weight:500;letter-spacing:-.02em;line-height:1.2}
+.stat span{font-size:.78rem;color:var(--muted)}
+.today-btn{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:0 16px;border-radius:12px;background:var(--gold);color:var(--on-gold);font-weight:600;transition:transform .12s var(--ease),filter .2s}
+.today-btn:hover{filter:brightness(1.06)}
+.today-btn:active{transform:scale(.985)}
+.today-btn small{font-weight:500;opacity:.8;white-space:nowrap}
+.today-btn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+
+/* Week strip */
+.strip{position:sticky;top:0;z-index:20;background:var(--glass);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+@media (prefers-reduced-transparency:reduce){.strip{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none}}
+.weeks{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;scroll-snap-type:x proximity;scrollbar-width:none;max-width:880px;margin:0 auto}
+.weeks::-webkit-scrollbar{display:none}
+.wk{flex:0 0 auto;scroll-snap-align:center;min-width:58px;height:58px;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;position:relative;transition:border-color .2s,background .2s,transform .12s var(--ease)}
+.wk:active{transform:scale(.95)}
+.wk .n{font-size:.95rem;font-weight:600;letter-spacing:-.01em}
+.wk .bar{width:28px;height:3px;border-radius:3px;background:var(--line-strong);overflow:hidden}
+.wk .bar i{display:block;height:100%;background:var(--gold);width:0;transition:width .4s var(--ease)}
+.wk.sel{border-color:var(--gold);background:var(--gold-soft)}
+.wk.sel .n{color:var(--gold)}
+.wk.now::after{content:"";position:absolute;top:6px;right:6px;width:5px;height:5px;border-radius:50%;background:var(--gold)}
+
+/* Week header */
+.week-head{padding:30px 0 6px}
+.week-head .phase-lbl{color:var(--gold);font-size:.85rem;font-weight:500}
+.week-head h2{font-size:clamp(1.6rem,4.6vw,2.1rem);font-weight:600;letter-spacing:-.03em;line-height:1.1;margin-top:4px}
+.week-head .range{color:var(--muted);font-size:.92rem;margin-top:6px}
+.phase-card{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.phase-card div{padding:14px 16px}
+.phase-card div+div{border-left:1px solid var(--line)}
+.phase-card span{display:block;font-size:.75rem;color:var(--faint);margin-bottom:3px}
+.phase-card p{font-size:.92rem;line-height:1.45}
+.bench{margin-top:12px;display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:var(--r);background:var(--gold-soft);border:1px solid var(--gold-line);font-size:.92rem;line-height:1.45}
+.bench i{color:var(--gold);font-size:20px;flex-shrink:0;margin-top:1px}
+.bench b{font-weight:600}
+
+/* Days */
+.days{list-style:none;display:grid;gap:10px;padding:22px 0 40px}
+.day{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow);transition:border-color .25s,background .25s;overflow:hidden}
+.day.is-today{border-color:var(--gold-line)}
+.day.done{background:color-mix(in srgb,var(--surface) 100%,transparent);}
+.day.done .d-body-top{opacity:.62}
+.d-head{display:flex;align-items:center;gap:12px;padding:12px 12px 12px 12px}
+.check{flex-shrink:0;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;position:relative}
+.check .c{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line-strong);display:grid;place-items:center;transition:background .25s var(--ease),border-color .25s,transform .15s var(--ease)}
+.check i{font-size:17px;color:var(--on-gold);transform:scale(0);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.check:hover .c{border-color:var(--gold)}
+.check:active .c{transform:scale(.88)}
+.day.done .check .c{background:var(--gold);border-color:var(--gold)}
+.day.done .check i{transform:scale(1)}
+.d-tap{flex:1;min-width:0;display:flex;align-items:center;gap:14px;text-align:left;min-height:52px;padding-right:4px}
+.date{flex-shrink:0;width:46px;text-align:center;line-height:1.1}
+.date>span,.d-body-top>span{display:block}
+.d-body-top>.d-title{display:flex}
+.date .dw{font-size:.72rem;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.date .dn{font-size:1.45rem;font-weight:500;letter-spacing:-.03em}
+.date .dm{font-size:.72rem;color:var(--faint)}
+.d-body-top{flex:1;min-width:0;transition:opacity .25s}
+.d-title{font-weight:600;font-size:1.02rem;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tag-today{font-size:.7rem;font-weight:600;color:var(--on-gold);background:var(--gold);padding:2px 8px;border-radius:99px;letter-spacing:.02em}
+.d-sum{color:var(--muted);font-size:.88rem;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d-meta{flex-shrink:0;display:flex;align-items:center;gap:10px;color:var(--faint);font-size:.8rem}
+.chev{font-size:18px;transition:transform .35s var(--ease)}
+.day.open .chev{transform:rotate(180deg)}
+.d-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .42s var(--ease)}
+.day.open .d-panel{grid-template-rows:1fr}
+.d-panel>div{overflow:hidden}
+.d-inner{padding:4px 16px 18px;border-top:1px solid var(--line);margin:0 0 0}
+.d-info{display:flex;gap:8px;flex-wrap:wrap;padding:14px 0 4px}
+.pill{font-size:.78rem;padding:5px 10px;border-radius:99px;border:1px solid var(--line);color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.pill i{font-size:14px}
+.sec{margin-top:18px}
+.sec-h{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sec-h .ico{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--gold-soft);color:var(--gold)}
+.sec-h .ico i{font-size:17px}
+.sec-h h3{font-size:.98rem;font-weight:600;letter-spacing:-.01em}
+.sec-h small{margin-left:auto;color:var(--faint);font-size:.78rem}
+.rest-note{padding:14px 16px;border-radius:var(--r-sm);background:var(--surface-2);color:var(--muted);font-size:.92rem;display:flex;gap:10px;align-items:center}
+.rest-note i{font-size:18px;color:var(--faint)}
+ol.ex{list-style:none;display:grid;gap:8px;counter-reset:ex}
+.exi{counter-increment:ex;padding:14px 14px 14px 44px;border-radius:var(--r-sm);background:var(--surface-2);position:relative}
+.exi::before{content:counter(ex);position:absolute;left:14px;top:14px;width:20px;height:20px;border-radius:50%;border:1px solid var(--line-strong);font:500 .7rem/18px "Geist Mono",monospace;text-align:center;color:var(--muted)}
+.exi h4{font-size:.96rem;font-weight:600;letter-spacing:-.005em;line-height:1.35}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-size:.76rem;line-height:1.3;padding:4px 9px;border-radius:7px;background:var(--surface);border:1px solid var(--line);color:var(--text)}
+.chip em{font-style:normal;color:var(--faint);margin-right:4px}
+.chip.rpe{color:var(--gold);border-color:var(--gold-line)}
+.how{margin-top:9px;font-size:.89rem;color:var(--muted);line-height:1.5}
+.safe{margin-top:8px;font-size:.84rem;display:flex;gap:7px;align-items:flex-start;color:var(--text)}
+.safe i{color:var(--gold);font-size:15px;margin-top:2px;flex-shrink:0}
+.tech{margin-top:10px;font-size:.82rem;color:var(--gold);display:inline-flex;align-items:center;gap:5px;min-height:32px;font-weight:500}
+.tech i{font-size:14px;transition:transform .3s var(--ease)}
+.tech[aria-expanded="true"] i{transform:rotate(90deg)}
+.tech-body{display:none;margin-top:4px;padding:12px;border-radius:9px;border:1px dashed var(--line-strong);font-size:.85rem;color:var(--muted);line-height:1.5}
+.tech-body.show{display:grid;gap:6px}
+.tech-body b{color:var(--text);font-weight:600}
+.done-row{margin-top:18px;width:100%;min-height:50px;border-radius:12px;border:1px solid var(--gold-line);color:var(--gold);font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s,transform .12s var(--ease)}
+.done-row:hover{background:var(--gold-soft)}
+.done-row:active{transform:scale(.985)}
+.day.done .done-row{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
+
+.week-nav{display:flex;justify-content:space-between;gap:10px;padding-bottom:28px}
+.week-nav button{min-height:48px;padding:0 18px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:inline-flex;align-items:center;gap:8px;font-weight:500;transition:border-color .2s,transform .12s var(--ease)}
+.week-nav button:hover{border-color:var(--line-strong)}
+.week-nav button:active{transform:scale(.97)}
+.week-nav button[disabled]{opacity:.35;pointer-events:none}
+
+footer{padding:24px 0 calc(env(safe-area-inset-bottom) + 40px);color:var(--faint);font-size:.8rem;border-top:1px solid var(--line)}
+
+/* Sheet */
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;z-index:50;left:0;right:0;bottom:0;max-height:88dvh;overflow:auto;background:var(--surface);border-radius:22px 22px 0 0;border:1px solid var(--line);padding:10px 20px calc(env(safe-area-inset-bottom) + 28px);transform:translateY(105%);visibility:hidden;transition:transform .45s var(--ease),visibility 0s .45s;overscroll-behavior:contain}
+.sheet.on{transform:none;visibility:visible;transition:transform .45s var(--ease),visibility 0s}
+@media (min-width:720px){.sheet{left:50%;right:auto;width:620px;bottom:auto;top:50%;border-radius:22px;transform:translate(-50%,-46%) scale(.97);opacity:0;pointer-events:none;transition:transform .4s var(--ease),opacity .25s,visibility 0s .4s;padding:10px 28px 28px}.sheet.on{transform:translate(-50%,-50%);opacity:1;pointer-events:auto;transition:transform .4s var(--ease),opacity .25s,visibility 0s}}
+.grab{width:38px;height:5px;border-radius:5px;background:var(--line-strong);margin:4px auto 12px}
+@media (min-width:720px){.grab{display:none}}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-top:6px}
+.sheet h2{font-size:1.35rem;font-weight:600;letter-spacing:-.025em}
+.sheet h3{font-size:.95rem;font-weight:600;margin:22px 0 10px}
+.sheet p,.sheet li{font-size:.92rem;color:var(--muted);line-height:1.55}
+.pain{display:grid;gap:8px}
+.pain div{display:grid;grid-template-columns:76px 1fr;gap:12px;padding:12px 14px;border-radius:12px;background:var(--surface-2);align-items:start}
+.pain b{font-family:"Geist Mono",monospace;font-weight:500;font-size:.88rem}
+.pain .l1 b{color:var(--gold)}
+.pain .l3 b{color:#d0705a}
+.rules{list-style:none;display:grid;gap:8px}
+.rules li{padding-left:18px;position:relative}
+.rules li::before{content:"";position:absolute;left:2px;top:.65em;width:6px;height:1.5px;background:var(--gold)}
+.phases{display:grid;gap:6px}
+.phases div{display:grid;grid-template-columns:52px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.phases div:last-child{border-bottom:0}
+.phases b{font-family:"Geist Mono",monospace;font-weight:500;font-size:.85rem;color:var(--gold)}
+.phases.fb div{grid-template-columns:56px 1fr}
+.phases p{color:var(--text)}
+.phases small{display:block;color:var(--muted);font-size:.84rem}
+.code{display:flex;gap:8px;margin-top:10px}
+.code input{flex:1;min-width:0;height:50px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--text);padding:0 14px;font:500 1rem "Geist Mono",monospace;letter-spacing:.04em}
+.code input::placeholder{color:var(--faint)}
+.code input:focus{outline:2px solid var(--gold);outline-offset:0;border-color:transparent}
+.btn{height:50px;padding:0 18px;border-radius:12px;font-weight:600;background:var(--gold);color:var(--on-gold);white-space:nowrap;transition:transform .12s var(--ease),filter .2s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line-strong)}
+.msg{font-size:.85rem;margin-top:8px;min-height:1.3em;color:var(--gold)}
+.msg.err{color:#d0705a}
+label.lbl{display:block;font-size:.85rem;font-weight:500;color:var(--text);margin-top:16px}
+
+/* Load log */
+.log-hint{font-size:.85rem;color:var(--muted);line-height:1.45;margin:-2px 0 10px}
+.lg{border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 12px 14px;background:var(--surface-2);margin-top:8px;min-width:0}
+.lg h4{display:flex;align-items:center;gap:7px;font-size:.86rem;font-weight:600;color:var(--text)}
+.lg h4 i{color:var(--gold);font-size:16px}
+.lg h4 small{font-weight:400;color:var(--faint);font-size:.78rem}
+.lf{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:8px;margin-top:10px;align-items:end}
+.lf label{display:grid;gap:4px;font-size:.74rem;color:var(--muted);min-width:0}
+.lf input,.lf textarea{width:100%;min-width:0;height:44px;border-radius:9px;border:1px solid var(--line-strong);background:var(--surface);color:var(--text);padding:0 11px;font:500 16px "Geist Mono",ui-monospace,monospace}
+.lf textarea{height:auto;min-height:64px;padding:10px 11px;font:400 16px/1.45 "Geist",system-ui,sans-serif;resize:vertical}
+.lf input::placeholder,.lf textarea::placeholder{color:var(--faint);opacity:.7;font:400 .9rem "Geist",system-ui,sans-serif}
+.lf input:focus,.lf textarea:focus{outline:2px solid var(--gold);outline-offset:0;border-color:transparent}
+.lf.wide{grid-template-columns:1fr}
+.pain-row{display:grid;gap:5px;margin-top:8px}
+.pain-row>span{font-size:.74rem;color:var(--muted)}
+.scale{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}
+.scale button{height:38px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface);font:500 .82rem "Geist Mono",monospace;color:var(--muted);transition:background .15s,color .15s,border-color .15s}
+.scale button[aria-pressed="true"]{color:#fff;border-color:transparent;background:var(--gold)}
+.scale button.p2[aria-pressed="true"]{background:#c08a2e}
+.scale button.p3[aria-pressed="true"]{background:#c4573f}
+.pain-msg{font-size:.78rem;color:var(--muted);min-height:1.1em}
+.log-state{transition:color .2s}
+.log-state.ok{color:var(--gold)}
+.lg-mark{color:var(--gold);font-size:15px}
+.ll-empty{padding:22px 16px;border-radius:12px;background:var(--surface-2);color:var(--muted);font-size:.9rem;text-align:center}
+.ll-w{font:500 .78rem "Geist Mono",monospace;color:var(--gold);margin:18px 0 6px;letter-spacing:.03em}
+.ll-row{display:block;width:100%;text-align:left;padding:12px 14px;border-radius:12px;background:var(--surface-2);margin-top:6px;border:1px solid transparent;transition:border-color .2s}
+.ll-row:hover{border-color:var(--gold-line)}
+.ll-row strong{display:flex;justify-content:space-between;gap:10px;font-size:.92rem;font-weight:600;color:var(--text)}
+.ll-row strong span{font-weight:400;color:var(--faint);font-size:.8rem}
+.ll-row ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ll-row li{font-size:.76rem;padding:3px 8px;border-radius:7px;background:var(--surface);border:1px solid var(--line);color:var(--text);line-height:1.35}
+.ll-row li em{font-style:normal;color:var(--faint);margin-right:4px}
+.ll-row p{margin-top:8px;font-size:.84rem}
+
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 22px);z-index:60;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--text);color:var(--bg);padding:11px 18px;border-radius:99px;font-size:.88rem;font-weight:500;transition:transform .4s var(--ease),opacity .25s;white-space:nowrap}
+.toast.on{transform:translate(-50%,0);opacity:1}
+
+@media (max-width:560px){
+  .top-row{flex-direction:column-reverse;gap:18px}
+  .icon-btns{align-self:flex-end}
+  .sub{max-width:none}
+  .stats{grid-template-columns:auto 1fr;gap:16px;padding:16px}
+  .ring{width:76px;height:76px}
+  .stat b{font-size:1.15rem}
+  .d-meta .tm{display:none}
+  .phase-card{grid-template-columns:1fr}
+  .phase-card div+div{border-left:0;border-top:1px solid var(--line)}
+  .d-inner{padding:2px 12px 14px}
+  .exi{padding:13px 12px 13px 40px}
+  .exi::before{left:11px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="top-row">
+      <div>
+        <h1>Training for Climbing</h1>
+        <p class="sub" id="subline">12-week climbing plan. Pure wall climbing first, then post-climbing work.</p>
+      </div>
+      <div class="icon-btns">
+        <button class="ibtn" id="btnLog" aria-label="Load log"><i class="ph ph-notebook"></i></button>
+        <button class="ibtn" id="btnRules" aria-label="Rules and phases"><i class="ph ph-shield-check"></i></button>
+        <button class="ibtn rpe-btn" id="btnRpe" aria-label="What RPE means"><span class="mono">RPE</span></button>
+        <button class="ibtn" id="btnTheme" aria-label="Toggle light or dark theme"><i class="ph ph-moon"></i></button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="ring" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><circle class="trk" cx="50" cy="50" r="44"/><circle class="val" id="ringVal" cx="50" cy="50" r="44" stroke-dasharray="276.46" stroke-dashoffset="276.46"/></svg>
+        <div class="pct mono" id="pct">0%</div>
+      </div>
+      <div class="stat-list">
+        <div class="stat"><b class="mono" id="sDone">0</b><span>of 84 days</span></div>
+        <div class="stat"><b class="mono" id="sCore">0</b><span>gym days</span></div>
+        <div class="stat"><b class="mono" id="sStreak">0</b><span>day streak</span></div>
+      </div>
+      <button class="today-btn" id="btnToday"><span id="todayLbl">Go to today</span><small id="todaySub"></small></button>
+    </div>
+  </header>
+</div>
+
+<nav class="strip" aria-label="Weeks"><div class="weeks" id="weeks"></div></nav>
+
+<main class="wrap">
+  <section class="week-head" id="weekHead"></section>
+  <ul class="days" id="days"></ul>
+  <div class="week-nav">
+    <button id="prevW"><i class="ph ph-arrow-left"></i>Previous week</button>
+    <button id="nextW">Next week<i class="ph ph-arrow-right"></i></button>
+  </div>
+</main>
+
+<div class="wrap"><footer>Coaching plan, not medical advice. Stop for sharp joint pain, sudden weakness or instability. <span id="syncNote"></span></footer></div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheetRules" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+  <div class="grab"></div>
+  <div class="sheet-h"><h2 id="rulesTitle">Rules and phases</h2><button class="ibtn" data-close aria-label="Close"><i class="ph ph-x"></i></button></div>
+  <p>Version 5: more strength and muscle, not more random fatigue. Sunday is redpoints, Tuesday is route circuits with heavy grip and pulling, Thursday is hard repeats with campus and pull-up power. Every gym day ends with three core exercises.</p>
+  <h3>Every gym day</h3>
+  <ul class="rules">
+    <li>At least 60 minutes of pure wall climbing first, about 70 or more on most days. Every Beastmaker, campus, pull-up, fix and core drill comes after it.</li>
+    <li>No TRX on climbing days. Optional home TRX on Monday or Friday only; Wednesday and Saturday are rest.</li>
+    <li>Gym grades are your gym's 1-8 scale: grade 4 comfortable, grade 5 moderate to hard, grade 6 your project. Don't convert them to Font grades.</li>
+    <li>A true 4×4 is four problems repeated for four rounds. Five problems for four rounds is a 5×4. Rest 15-30 sec between problems and 3-4 min between rounds.</li>
+    <li>Aim for roughly 150-175 minutes in total per gym session.</li>
+  </ul>
+  <h3>Campus</h3>
+  <ul class="rules">
+    <li>Campus is never part of pure climbing. Use grade 2-3 routes on big secure jugs: 3-5 ascents of 4-6 hand moves, 2.5-3 min rest.</li>
+    <li>Slow, clean and controlled. No max leaps or swinging. Stop when accuracy drops, or switch to feet-on.</li>
+  </ul>
+  <h3>When to change the load</h3>
+  <div class="pain">
+    <div class="l1"><b>Increase</b><p>After two clean sessions at or under the prescribed RPE, change ONE of weight, difficulty, reps or seconds. On the 20 mm edge, +1-2.5 kg; never change weight, time and edge together.</p></div>
+    <div class="l2"><b>Repeat</b><p>Effort above the target: repeat the same sets and load next time instead of chasing failure.</p></div>
+    <div class="l3"><b>Reduce</b><p>Recovery getting worse: eat more and cut the workload. Deload weeks 4 and 8 are never failure days.</p></div>
+  </div>
+  <p style="margin-top:10px">Use the Load Log to make these calls from what you actually did. Most muscle-building sets target RPE 7-9 with 1-3 clean reps in reserve, with strict form on weighted pulls.</p>
+  <h3>Fingers and joints</h3>
+  <ul class="rules">
+    <li>Fingers and elbows adapt more slowly than muscles. Progress 20 mm and campus volume conservatively, even when you feel stronger.</li>
+    <li>Your 10 mm 3-finger pocket hangs were easy. That's no reason to max out pockets when tired.</li>
+    <li>Stop for sharp joint pain, sudden weakness or instability, and consider a professional reassessment if it recurs. One pain-free day isn't permission for maximal campus jumps.</li>
+  </ul>
+  <h3>Your completed sessions</h3>
+  <div class="phases fb">
+    <div><b>Nov 1</b><p>Sunday redpoint, original workout<small>Kept as done. Sunday now ends with pull-ups, fixes, campus and core.</small></p></div>
+    <div><b>Nov 3</b><p>Tuesday spraywall felt right<small>10 mm pockets 10 × 8+ sec at RPE 4-5, 5 × 5 pull-ups at RPE 5-6, fixes 3 × 2 rounds × 5 sec at RPE 4-5. Load and reps now go up with strict form.</small></p></div>
+    <div><b>Nov 8</b><p>Sunday redpoint done, post workout too easy<small>Future Sundays include jug campus, pulling, fixes and three hard core exercises.</small></p></div>
+    <div><b>Nov 5, 10</b><p>Not reported<small>Use the new prescription if you haven't done them, and record actual results if you have.</small></p></div>
+  </div>
+  <h3>The 12 weeks</h3>
+  <div class="phases" id="phaseList"></div>
+  <h3>Nutrition</h3>
+  <ul class="rules">
+    <li>Protein about 120-150 g a day, with carbohydrate around gym sessions.</li>
+    <li>Fuel high-effort sessions. Avoid an aggressive deficit while building muscle; the old 68-69 kg target no longer applies.</li>
+    <li>If recovery gets worse, eat more and reduce the workload.</li>
+  </ul>
+</div>
+
+<div class="sheet" id="sheetLog" role="dialog" aria-modal="true" aria-labelledby="logTitle">
+  <div class="grab"></div>
+  <div class="sheet-h"><h2 id="logTitle">Load log</h2><button class="ibtn" data-close aria-label="Close"><i class="ph ph-x"></i></button></div>
+  <p>What actually got harder. Log added weight, pull-ups, fix seconds, campus ascents, core and RPE inside each gym day. Tap a session to open it.</p>
+  <div id="logList"></div>
+</div>
+
+<div class="sheet" id="sheetRpe" role="dialog" aria-modal="true" aria-labelledby="rpeTitle">
+  <div class="grab"></div>
+  <div class="sheet-h"><h2 id="rpeTitle">What RPE means</h2><button class="ibtn" data-close aria-label="Close"><i class="ph ph-x"></i></button></div>
+  <p>RPE stands for Rate of Perceived Exertion. It's a scale from 1 to 10 that measures how hard an exercise feels to you.</p>
+  <p style="margin-top:10px">In this program, RPE controls training intensity, especially for fingerboarding, pull-ups, lock-offs and strength exercises.</p>
+  <div class="rpe-scale" id="rpeScale"></div>
+  <p style="margin-top:16px"><b style="color:var(--text)">RPE measures effort, not pain.</b> Pain, or feeling worse the next day, always takes priority over the RPE target.</p>
+  <p style="margin-top:10px">Post-climbing fingerboard work is never taken to failure. If a hang feels harder than its target RPE, remove added weight or stop the set. For timed hangs, RPE is a rough effort estimate.</p>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const DATA = {"ex":[["Historical redpoint session","Original workout completed","","As actually rested","Recorded","Completed before this revision; exact original routes not reconstructed.","",115,"Grade 6 project"],["Historical short post session","Original post-workout completed","","","Easy","Completed under previous version. User reported 8 Nov post-workout was too easy.","",13,"Recovery / core"],["Home TRX or rest","Rows 2×12; squats 2×12; dead bugs 2×12","","","RPE 4-5","Optional easy TRX rows + TRX squat, then dead bugs; avoid fatigued pulling after Sunday.","Skip entirely if Sunday was demanding.","",""],["Historical climbing + spraywall","Original session completed","","As performed","Good RPE","Spraywall intensity was reported as appropriate. Preserve this prior completion.","",95,"Grades 2-6"],["Historical grip + pull + fixes","10×8+s pocket; 5×5 pullups; 3×2 fix rounds","","As performed","RPE 4-6","Actual observations: pocket hangs RPE4-5, pullups RPE5-6; fixes at 3 angles ×5s RPE4-5. Core underdosed.","",42,"10mm 3-finger + BW pullups"],["Rest","Rest; optional 15-30min easy walk","","","RPE 1-3","No strength session; easy walk or mobility if you want.","Recovery before Thursday campus work.","",""],["Warm-up: full routes","6-8 climbs","","30-60 sec","RPE 2-4","Easy positive holds, then steeper routes.","",15,"Grades 2-3"],["Steep grade-4 recruitment","4-5 problems","","60-120 sec","RPE 5-6","Prepare for stronger climbing without fingerboard.","",10,"Grade 4"],["Strength circuit: 3×3","3 grade-5 routes × 3 rounds","","2-3 min between attempts / rounds","RPE 8-9","Routes are REAL climbs. Full recovery if high difficulty, prioritize strength over racing.","",30,"Gym grade 4-6"],["Grip-specific steep repeaters","3-5 problems emphasizing pinches / half-crimps / slopers","","90-150 sec","RPE 7-8","Climb whole routes with maximal foot tension and still feet. No technique-only slab/dyno work.","",20,"Grade 4-5"],["Easy climbs before post","2-3 easy problems","","As needed","RPE 2-3","Transition to campus board and strength afterward.","",5,"Grades 2-3"],["CAMPUS CLIMBING: easy jug routes","3 ascents × 4-5 hand moves","","2.5-3 min","RPE 6-8","Feet-off hand-over-hand up large jugs/low rungs; NO dynamic leaps. Use a grade-2 route with big holds if grade 3 grips are smaller. Stop before swing/failure.","",16,"Grade 2-3; big secure jugs"],["Campus medium slopers / open-hand grip","2×8s static","","2-3 min","RPE 6-7","Two-hand bodyweight static medium slopers. If you feel high finger fatigue after ladders, swap for 2×10s easy 20-25mm open-hand hangs.","",9,"Mid campus slopers"],["PULL-UP POWER: fast concentric","4×5 BW power-focused","","2.5-3 min","RPE 7-8","Pull up fast without kipping; 2-second controlled lower. Stop a set once speed drops or rep becomes a grind.","",17,"Bar; BW / light load"],["FIXES: 90° bilateral hold","3×10-12s","","2-3 min","RPE 7-8","Lock at ~90°, scapula controlled, two hands; add small load only when no swing and RPE≤7.","",12,"Jug bar"],["Core A: hanging knee-to-chest","3×10-12","","60 sec","RPE 8","Raise pelvis, no swinging. Straighten knees to progress.","",8,"Bar"],["Core B: hollow rocks","3×18-25","","60 sec","RPE 8","Extend lever for challenge while keeping lower back on mat.","",8,"Floor"],["Core C: side plank with hip lift","3×10-12/side","","60 sec","RPE 7-8","Controlled lowering; optional small dumbbell on upper hip.","",8,"Floor"],["Home TRX or rest","Split squat 2×8/leg; easy push-ups 2×10","","","RPE 4-5","Optional TRX split squat and very easy push-ups; prioritize recovery if campus/fix workout was hard.","Never to failure; may skip.","",""],["Full rest","Rest day","","","Rest","No scheduled strength training. Fuel, sleep and prepare Sunday redpoint.","Avoid heavy finger work.","",""],["Wall warm-up","6-8 problems","","30-60 sec","RPE 2-4","Fully climb each boulder; gradually increase steepness and grip.","",15,"Grades 2-3"],["Steep activation","4-5 controlled problems","","60-90 sec","RPE 4-6","Progress to controlled 4s. All fingerboard/campus happens AFTER climbing.","",10,"Grades 3-4"],["Route circuit: 4×4","4 grade-4 problems × 4 rounds","","15-30s between problems; 3-4 min between rounds","RPE 7-8","A true 4×4 = FOUR problems repeated FOUR rounds. Five routes × four rounds is 5×4. Choose doable routes; target good form on final round.","",35,"Steep grade 4-5"],["Steep strength moves / link attempts","3-5 short hard links","","2-4 min","RPE 8","Grip-specific moves (half-crimp, pinch, slope), no dedicated slab/dyno practice.","",20,"Grades 5-6"],["Easy wall finish","2-3 controlled problems","","As needed","RPE 2-3","Only actual climbing; stop before starting post-climbing.","",5,"Grades 2-3"],["Beastmaker recruitment ramp","3×5 sec progressive","","45 sec","RPE 3-5","All finger work is after the complete wall climbing block.","",5,"20-25mm edge"],["MAIN finger strength: 20mm half-crimp","5×10s","","3 min","RPE 7-8","Bodyweight is baseline; add 1-2.5 kg only when full prescribed sets are RPE≤7 with stable form. Avoid failure on tiny pockets.","",20,"20mm, BOTH hands"],["Full-range pull-ups: heavy","5×6-8","","2.5-3 min","RPE 7-8","Complete full-ROM reps; add small load when prescribed reps feel easy. Stop with ~1-2 clean reps in reserve.","",20,"Bar; BW or small added weight"],["FIXES: 3 angles, 2 hands","3 sets × 2 rounds × 6s/angle","","2.5-3 min","RPE 7-8","One ROUND = fix at top, then 90°, then ~120°. Two rounds/set. Keep each lock fixed, no swing; never forced one-arm holds.","",18,"Top / 90° / 120°"],["Core A: hanging straight-leg / knee raises","3×8-12","","60-75 sec","RPE 8","Choose harder straight-leg leverage only if pelvic curl stays strict.","",8,"Bar"],["Core B: weighted dead bug","3×10-12/side","","45-60 sec","RPE 7-8","Hold one dumbbell or slow the eccentric; do not arch low back.","",8,"Light dumbbell / floor"],["Core C: hollow rocks + pause","3×15-20","","60 sec","RPE 8","1-second pause per rock; progress lever length or small plate, not sloppy reps.","",8,"Floor"],["Warm-up: flowing boulders","6-8 different problems","","30-60 sec","RPE 2-4","Use positive holds; no hangboard, campus or off-wall exercise.","",15,"Gym grades 2-3"],["Steep climbing ramp","4-5 increasing-difficulty problems","","60-120 sec","RPE 4-6","Choose overhangs, tension problems and grip variety; finish feeling prepared.","",15,"Gym grades 3-4"],["Main REDPOINT block","5-7 quality attempts / crux links","","4-6 min","RPE 8-9","Project a single hard steep problem. Rest fully; stop when movement quality or grip drops.","",55,"Grade 6 / 6+ local"],["Secondary strength links","2-3 links of 3-5 moves","","3 min","RPE 7-8","Select controlled lock-off / core-tension links, not dyno or slab drills.","",15,"Grade 5-6 cruxes"],["Easy route finish","2-3 easy problems","","As needed","RPE 2-3","Finish actual climbing and transition to post work.","",5,"Gym grades 2-3"],["Easy campus on jug route","2 ascents × 4-5 hand moves","","3 min","RPE 6-7","Campusing = hand-over-hand, feet off, controlled, no swing or explosive jump. Only if big holds and form stay clean; otherwise do easy feet-on climbing of same moves.","",10,"Gym grade 2-3; BIG jugs"],["Full-ROM pull-up volume","3×6-8 BW / +small load","","2-3 min","RPE 7-8","Strict full range, 1-2 reps in reserve. Add 1-2.5 kg only if last reps stay easy.","",14,"Bar / jug holds"],["Fixes: 3-angle maintenance","2 sets × 2 rounds × 6s/angle","","2 min","RPE 7","Each round: top fix 6-7 sec, 90° fix 6-7 sec, ~120° fix 6-7 sec; arms remain bilateral.","",12,"Big two-hand jugs"],["Core A: hanging knee raises","3×10-12","","60 sec","RPE 7-8","Curl pelvis upward, no swinging; use straight-leg raises only if controlled.","",8,"Bar"],["Core B: weighted reverse crunch","3×12-15","","60 sec","RPE 7-8","Slow lowering and posterior pelvic tilt. Add resistance only with perfect control.","",8,"Light dumbbell between feet OR BW"],["Core C: hollow rocks","3×15-20","","45-60 sec","RPE 7-8","Keep ribs down; progress by extending legs or holding light plate over chest.","",8,"Floor"],["Route circuit: 5×4","5 grade-4 problems × 4 rounds","","15-30s between problems; 3-4 min between rounds","RPE 7-8","A true 4×4 = FOUR problems repeated FOUR rounds. Five routes × four rounds is 5×4. Choose doable routes; target good form on final round.","",35,"Steep grade 4-5"],["Strength circuit: 4×3","4 grade-5 routes × 3 rounds","","2-3 min between attempts / rounds","RPE 8-9","Routes are REAL climbs. Full recovery if high difficulty, prioritize strength over racing.","",30,"Gym grade 4-6"],["Main REDPOINT block","2-3 high-quality attempts","","4-6 min","RPE 6-7","Project a single hard steep problem. Rest fully; stop when movement quality or grip drops.","",25,"Grade 6 / 6+ local"],["Secondary strength links","2-3 links of 3-5 moves","","3 min","RPE 5-6","Select controlled lock-off / core-tension links, not dyno or slab drills.","",15,"Grade 5-6 cruxes"],["Easy pull-ups: reduced volume","2×5 BW strict","","2 min","RPE 5-6","No added weight this week.","",8,"Bar / big jugs"],["Short bilateral 90° fix","2×6 sec","","90 sec","RPE 5-6","Hold both hands at 90 degrees without swinging.","",6,"Big jug bar"],["Core: reverse crunch","2×12 strict","","45 sec","RPE 6","Posterior pelvic tilt; no momentum.","",6,"Floor"],["Core: hollow hold","2×25-30 sec","","45 sec","RPE 6","Maintain low-back contact with the mat.","",6,"Floor"],["Route circuit: 2×4 recovery","4 grade-3-4 problems × 2 rounds","","15-30s between problems; 3-4 min between rounds","RPE 6","A true 4×4 = FOUR problems repeated FOUR rounds. Five routes × four rounds is 5×4. Choose doable routes; target good form on final round.","",20,"Grades 3-4"],["Steep strength moves / link attempts","3 moderate grade-4 links","","2-4 min","RPE 6","Grip-specific moves (half-crimp, pinch, slope), no dedicated slab/dyno practice.","",15,"Grades 5-6"],["Easy wall finish","2-3 controlled problems","","As needed","RPE 2-3","Only actual climbing; stop before starting post-climbing.","",10,"Grades 2-3"],["Beastmaker gradual recruitment","2×5 sec easy","","45 sec","RPE 3-4","Entirely post-climbing; no maximal tests.","",4,"20mm edge"],["Beastmaker half-crimp: easy","3×8s BW","","2 min","RPE 5-6","Reduce load/volume; fingers stay fresh.","",10,"20mm, two-hand"],["Pull-ups: light","2×5-6 BW","","2 min","RPE 5-6","Strict range, no added weight.","",8,"Bar"],["Three-angle fixes: deload","2 sets × 1 round × 5s/angle","","90 sec","RPE 5-6","Bilateral jugs; keep a smooth transition between angles.","",7,"Top, 90°, 120°"],["Core A: knee raises","2×10","","60 sec","RPE 6","Controlled pelvic curl.","",6,"Bar"],["Core B: hollow rocks","2×12-15","","45 sec","RPE 6","No swinging.","",6,"Floor"],["Strength circuit: 2×3 easy","3 grade-3-4 routes × 2 rounds","","2-3 min between attempts / rounds","RPE 6","Routes are REAL climbs. Full recovery if high difficulty, prioritize strength over racing.","",20,"Gym grade 4-6"],["Grip-specific steep repeaters","3-5 problems emphasizing pinches / half-crimps / slopers","","90-150 sec","RPE 6","Climb whole routes with maximal foot tension and still feet. No technique-only slab/dyno work.","",20,"Grade 4-5"],["Campus easy jug ladder: recovery option","0-2 ascents × 4 moves","","2 min","RPE 4-5","Optional; no footless campus if power/accuracy is poor.","",6,"Large jugs grade 2"],["Grip: open-hand hangs","2×8s BW","","2 min","RPE 5-6","Easy second finger stimulus after climbing.","",7,"20-25mm"],["Pull-up speed practice","2×4 BW controlled-fast up","","2 min","RPE 5-6","No grind or momentum.","",7,"Bar"],["90° fix: short","2×6-8s","","2 min","RPE 5-6","Static no swing.","",6,"Both-hand jugs"],["Core A: reverse crunch","2×12","","45 sec","RPE 6","Strict posterior pelvic tilt.","",6,"Floor"],["Core B: side plank hip lift","2×8/side","","45 sec","RPE 6","Neutral spine, no shoulder discomfort.","",6,"Floor"],["Easy campus on jug route","3 ascents × 5 hand moves","","3 min","RPE 6-7","Campusing = hand-over-hand, feet off, controlled, no swing or explosive jump. Only if big holds and form stay clean; otherwise do easy feet-on climbing of same moves.","",13,"Gym grade 2-3; BIG jugs"],["Full-ROM pull-up volume","3×6-8 with appropriate added load","","2-3 min","RPE 7-8","Strict full range, 1-2 reps in reserve. Add 1-2.5 kg only if last reps stay easy.","",14,"Bar / jug holds"],["Route circuit: 3×3 hard repeats","3 grade-5 problems × 3 rounds","","15-30s between problems; 3-4 min between rounds","RPE 7-8","A true 4×4 = FOUR problems repeated FOUR rounds. Five routes × four rounds is 5×4. Choose doable routes; target good form on final round.","",35,"Steep grade 4-5"],["MAIN finger strength: 20mm half-crimp","6×8-10s","","3 min","RPE 7-8","Bodyweight is baseline; add 1-2.5 kg only when full prescribed sets are RPE≤7 with stable form. Avoid failure on tiny pockets.","",20,"20mm, BOTH hands"],["Full-range pull-ups: heavy","5×6-8","","2.5-3 min","RPE 8-9","Complete full-ROM reps; add small load when prescribed reps feel easy. Stop with ~1-2 clean reps in reserve.","",20,"Bar; BW or small added weight"],["FIXES: 3 angles, 2 hands","4 sets × 2 rounds × 7s/angle","","2.5-3 min","RPE 7-8","One ROUND = fix at top, then 90°, then ~120°. Two rounds/set. Keep each lock fixed, no swing; never forced one-arm holds.","",18,"Top / 90° / 120°"],["Strength circuit: 3×3 tension","3 grade-5 routes × 3 rounds","","2-3 min between attempts / rounds","RPE 8-9","Routes are REAL climbs. Full recovery if high difficulty, prioritize strength over racing.","",30,"Gym grade 4-6"],["CAMPUS CLIMBING: easy jug routes","4 ascents × 5-6 hand moves","","2.5-3 min","RPE 6-8","Feet-off hand-over-hand up large jugs/low rungs; NO dynamic leaps. Use a grade-2 route with big holds if grade 3 grips are smaller. Stop before swing/failure.","",16,"Grade 2-3; big secure jugs"],["Campus medium slopers / open-hand grip","3×8-10s static","","2-3 min","RPE 6-7","Two-hand bodyweight static medium slopers. If you feel high finger fatigue after ladders, swap for 2×10s easy 20-25mm open-hand hangs.","",9,"Mid campus slopers"],["PULL-UP POWER: fast concentric","4×4-6 (+small load only if speed holds)","","2.5-3 min","RPE 7-8","Pull up fast without kipping; 2-second controlled lower. Stop a set once speed drops or rep becomes a grind.","",17,"Bar; BW / light load"],["Route circuit: 4×4 mixed","3 grade-4 + 1 grade-5 problem × 4 rounds","","15-30s between problems; 3-4 min between rounds","RPE 7-8","A true 4×4 = FOUR problems repeated FOUR rounds. Five routes × four rounds is 5×4. Choose doable routes; target good form on final round.","",35,"Steep grade 4-5"],["Strength circuit: pyramid repeats","4 → 5 → grade-6 crux link → 5 → 4; repeat twice","","2-3 min between attempts / rounds","RPE 8-9","Routes are REAL climbs. Full recovery if high difficulty, prioritize strength over racing.","",30,"Gym grade 4-6"],["Route circuit: 5×4 capacity","4 grade-4 + 1 grade-5 problem × 4 rounds","","15-30s between problems; 3-4 min between rounds","RPE 7-8","A true 4×4 = FOUR problems repeated FOUR rounds. Five routes × four rounds is 5×4. Choose doable routes; target good form on final round.","",35,"Steep grade 4-5"],["Fixes: 3-angle maintenance","2 sets × 2 rounds × 7s/angle","","2 min","RPE 7","Each round: top fix 6-7 sec, 90° fix 6-7 sec, ~120° fix 6-7 sec; arms remain bilateral.","",12,"Big two-hand jugs"],["MAIN finger strength: 20mm half-crimp","5×8s","","3 min","RPE 8","Bodyweight is baseline; add 1-2.5 kg only when full prescribed sets are RPE≤7 with stable form. Avoid failure on tiny pockets.","",20,"20mm, BOTH hands"],["Full-range pull-ups: heavy","5×4-6 weighted","","2.5-3 min","RPE 8-9","Complete full-ROM reps; add small load when prescribed reps feel easy. Stop with ~1-2 clean reps in reserve.","",20,"Bar; BW or small added weight"],["FIXES: 3 angles, 2 hands","3 sets × 2 rounds × 8s/angle","","2.5-3 min","RPE 7-8","One ROUND = fix at top, then 90°, then ~120°. Two rounds/set. Keep each lock fixed, no swing; never forced one-arm holds.","",18,"Top / 90° / 120°"],["Core A: hanging straight-leg / knee raises","4×8-10","","60-75 sec","RPE 8","Choose harder straight-leg leverage only if pelvic curl stays strict.","",8,"Bar"],["Strength circuit: 3×3 limit","3 grade-5 routes × 3 rounds + optional grade-6 crux","","2-3 min between attempts / rounds","RPE 8-9","Routes are REAL climbs. Full recovery if high difficulty, prioritize strength over racing.","",30,"Gym grade 4-6"],["CAMPUS CLIMBING: easy jug routes","4-5 ascents × 5-6 moves","","2.5-3 min","RPE 6-8","Feet-off hand-over-hand up large jugs/low rungs; NO dynamic leaps. Use a grade-2 route with big holds if grade 3 grips are smaller. Stop before swing/failure.","",16,"Grade 2-3; big secure jugs"],["FIXES: 90° bilateral hold","4×8-10s","","2-3 min","RPE 7-8","Lock at ~90°, scapula controlled, two hands; add small load only when no swing and RPE≤7.","",12,"Jug bar"],["Strength circuit: 4×2 difficult","4 grade-5 climbs × 2 rounds","","2-3 min between attempts / rounds","RPE 8-9","Routes are REAL climbs. Full recovery if high difficulty, prioritize strength over racing.","",30,"Gym grade 4-6"],["Route circuit: 4×3 harder","4 grade-5 problems × 3 rounds","","15-30s between problems; 3-4 min between rounds","RPE 7-8","A true 4×4 = FOUR problems repeated FOUR rounds. Five routes × four rounds is 5×4. Choose doable routes; target good form on final round.","",35,"Steep grade 4-5"],["Main REDPOINT block","3-5 quality attempts","","4-6 min","RPE 8-9","Project a single hard steep problem. Rest fully; stop when movement quality or grip drops.","",40,"Grade 6 / 6+ local"],["Secondary strength links","2-3 links of 3-5 moves","","3 min","RPE 7-8","Select controlled lock-off / core-tension links, not dyno or slab drills.","",10,"Grade 5-6 cruxes"],["Easy pull-ups: reduced volume","2×4 BW strict","","2 min","RPE 5-6","No added weight this week.","",8,"Bar / big jugs"],["Route circuit: 2×3 taper","3 grade-3-4 problems × 2 rounds","","15-30s between problems; 3-4 min between rounds","RPE 7-8","A true 4×4 = FOUR problems repeated FOUR rounds. Five routes × four rounds is 5×4. Choose doable routes; target good form on final round.","",20,"Steep grade 4-5"],["Steep strength moves / link attempts","3-5 short hard links","","2-4 min","RPE 6","Grip-specific moves (half-crimp, pinch, slope), no dedicated slab/dyno practice.","",15,"Grades 5-6"],["Beastmaker half-crimp: easy","2×8s BW","","2 min","RPE 5-6","Reduce load/volume; fingers stay fresh.","",7,"20mm, two-hand"],["Strength circuit: 2×3 taper","3 grade-3-4 routes × 2 rounds","","2-3 min between attempts / rounds","RPE 6","Routes are REAL climbs. Full recovery if high difficulty, prioritize strength over racing.","",20,"Gym grade 4-6"]],"days":{"1|Sunday":["Base + build","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","115 climbing + 13 post","Historical redpoint session. Original workout completed","Completed under the previous program. See the history notes.",[0],[1]],"1|Monday":["Base + build","Skip entirely if Sunday was demanding.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[2]],"1|Tuesday":["Base + build","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","95 climbing + 42 post","Historical climbing + spraywall. Original session completed","Completed under the previous program. See the history notes.",[3],[4]],"1|Wednesday":["Base + build","Recovery before Thursday campus work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[5]],"1|Thursday":["Base + build","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","80 climbing + 78 post","Strength circuit. 3×3. 3 grade-5 routes × 3 rounds","Campus grade-2/3 + slopers + pull-up power + fixes + 3 core drills",[6,7,8,9,10],[11,12,13,14,15,16,17]],"1|Friday":["Base + build","Never to failure; may skip.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[18]],"1|Saturday":["Base + build","Avoid heavy finger work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[19]],"2|Sunday":["Base + build","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","115 climbing + 13 post","Historical redpoint session. Original workout completed","Completed under the previous program. See the history notes.",[0],[1]],"2|Monday":["Base + build","Skip entirely if Sunday was demanding.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[2]],"2|Tuesday":["Base + build","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","85 climbing + 87 post","Route circuit. 4×4. 4 grade-4 problems × 4 rounds","20mm hangs + heavy pull-ups + 3-angle fixes + 3 core drills",[20,21,22,23,24],[25,26,27,28,29,30,31]],"2|Wednesday":["Base + build","Recovery before Thursday campus work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[5]],"2|Thursday":["Base + build","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","80 climbing + 78 post","Strength circuit. 3×3. 3 grade-5 routes × 3 rounds","Campus grade-2/3 + slopers + pull-up power + fixes + 3 core drills",[6,7,8,9,10],[11,12,13,14,15,16,17]],"2|Friday":["Base + build","Never to failure; may skip.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[18]],"2|Saturday":["Base + build","Avoid heavy finger work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[19]],"3|Sunday":["Base + build","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","105 climbing + 60 post","Main REDPOINT block. 5-7 quality attempts / crux links","Pull-ups + fixes + campus jugs + 3 core drills",[32,33,34,35,36],[37,38,39,40,41,42]],"3|Monday":["Base + build","Skip entirely if Sunday was demanding.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[2]],"3|Tuesday":["Base + build","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","85 climbing + 87 post","Route circuit. 5×4. 5 grade-4 problems × 4 rounds","20mm hangs + heavy pull-ups + 3-angle fixes + 3 core drills",[20,21,43,23,24],[25,26,27,28,29,30,31]],"3|Wednesday":["Base + build","Recovery before Thursday campus work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[5]],"3|Thursday":["Base + build","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","80 climbing + 78 post","Strength circuit. 4×3. 4 grade-5 routes × 3 rounds","Campus grade-2/3 + slopers + pull-up power + fixes + 3 core drills",[6,7,44,9,10],[11,12,13,14,15,16,17]],"3|Friday":["Base + build","Never to failure; may skip.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[18]],"3|Saturday":["Base + build","Avoid heavy finger work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[19]],"4|Sunday":["Deload","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","75 climbing + 26 post","Main REDPOINT block. 2-3 high-quality attempts","LIGHT / TAPER. lower volume + core; follow detailed tab",[32,33,45,46,36],[47,48,49,50]],"4|Monday":["Deload","Skip entirely if Sunday was demanding.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[2]],"4|Tuesday":["Deload","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","70 climbing + 41 post","Wall warm-up. 6-8 problems","LIGHT / TAPER. lower volume + core; follow detailed tab",[20,21,51,52,53],[54,55,56,57,58,59]],"4|Wednesday":["Deload","Recovery before Thursday campus work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[5]],"4|Thursday":["Deload","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","70 climbing + 38 post","Warm-up: full routes. 6-8 climbs","LIGHT / TAPER. lower volume + core; follow detailed tab",[6,7,60,61,10],[62,63,64,65,66,67]],"4|Friday":["Deload","Never to failure; may skip.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[18]],"4|Saturday":["Deload","Avoid heavy finger work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[19]],"5|Sunday":["Hypertrophy + strength","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","105 climbing + 63 post","Main REDPOINT block. 5-7 quality attempts / crux links","Pull-ups + fixes + campus jugs + 3 core drills",[32,33,34,35,36],[68,69,39,40,41,42]],"5|Monday":["Hypertrophy + strength","Skip entirely if Sunday was demanding.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[2]],"5|Tuesday":["Hypertrophy + strength","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","85 climbing + 87 post","Route circuit. 3×3 hard repeats. 3 grade-5 problems × 3 rounds","20mm hangs + heavy pull-ups + 3-angle fixes + 3 core drills",[20,21,70,23,24],[25,71,72,73,29,30,31]],"5|Wednesday":["Hypertrophy + strength","Recovery before Thursday campus work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[5]],"5|Thursday":["Hypertrophy + strength","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","80 climbing + 78 post","Strength circuit. 3×3 tension. 3 grade-5 routes × 3 rounds","Campus grade-2/3 + slopers + pull-up power + fixes + 3 core drills",[6,7,74,9,10],[75,76,77,14,15,16,17]],"5|Friday":["Hypertrophy + strength","Never to failure; may skip.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[18]],"5|Saturday":["Hypertrophy + strength","Avoid heavy finger work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[19]],"6|Sunday":["Hypertrophy + strength","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","105 climbing + 63 post","Main REDPOINT block. 5-7 quality attempts / crux links","Pull-ups + fixes + campus jugs + 3 core drills",[32,33,34,35,36],[68,69,39,40,41,42]],"6|Monday":["Hypertrophy + strength","Skip entirely if Sunday was demanding.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[2]],"6|Tuesday":["Hypertrophy + strength","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","85 climbing + 87 post","Route circuit. 4×4 mixed. 3 grade-4 + 1 grade-5 problem × 4 rounds","20mm hangs + heavy pull-ups + 3-angle fixes + 3 core drills",[20,21,78,23,24],[25,71,72,73,29,30,31]],"6|Wednesday":["Hypertrophy + strength","Recovery before Thursday campus work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[5]],"6|Thursday":["Hypertrophy + strength","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","80 climbing + 78 post","Strength circuit. pyramid repeats. 4 → 5 → grade-6 crux link → 5 → 4; repeat twice","Campus grade-2/3 + slopers + pull-up power + fixes + 3 core drills",[6,7,79,9,10],[75,76,77,14,15,16,17]],"6|Friday":["Hypertrophy + strength","Never to failure; may skip.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[18]],"6|Saturday":["Hypertrophy + strength","Avoid heavy finger work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[19]],"7|Sunday":["Hypertrophy + strength","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","105 climbing + 63 post","Main REDPOINT block. 5-7 quality attempts / crux links","Pull-ups + fixes + campus jugs + 3 core drills",[32,33,34,35,36],[68,69,39,40,41,42]],"7|Monday":["Hypertrophy + strength","Skip entirely if Sunday was demanding.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[2]],"7|Tuesday":["Hypertrophy + strength","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","85 climbing + 87 post","Route circuit. 5×4 capacity. 4 grade-4 + 1 grade-5 problem × 4 rounds","20mm hangs + heavy pull-ups + 3-angle fixes + 3 core drills",[20,21,80,23,24],[25,71,72,73,29,30,31]],"7|Wednesday":["Hypertrophy + strength","Recovery before Thursday campus work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[5]],"7|Thursday":["Hypertrophy + strength","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","80 climbing + 78 post","Strength circuit. 4×3. 4 grade-5 routes × 3 rounds","Campus grade-2/3 + slopers + pull-up power + fixes + 3 core drills",[6,7,44,9,10],[75,76,77,14,15,16,17]],"7|Friday":["Hypertrophy + strength","Never to failure; may skip.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[18]],"7|Saturday":["Hypertrophy + strength","Avoid heavy finger work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[19]],"8|Sunday":["Deload","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","75 climbing + 26 post","Main REDPOINT block. 2-3 high-quality attempts","LIGHT / TAPER. lower volume + core; follow detailed tab",[32,33,45,46,36],[47,48,49,50]],"8|Monday":["Deload","Skip entirely if Sunday was demanding.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[2]],"8|Tuesday":["Deload","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","70 climbing + 41 post","Wall warm-up. 6-8 problems","LIGHT / TAPER. lower volume + core; follow detailed tab",[20,21,51,52,53],[54,55,56,57,58,59]],"8|Wednesday":["Deload","Recovery before Thursday campus work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[5]],"8|Thursday":["Deload","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","70 climbing + 38 post","Warm-up: full routes. 6-8 climbs","LIGHT / TAPER. lower volume + core; follow detailed tab",[6,7,60,61,10],[62,63,64,65,66,67]],"8|Friday":["Deload","Never to failure; may skip.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[18]],"8|Saturday":["Deload","Avoid heavy finger work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[19]],"9|Sunday":["Max strength + power","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","105 climbing + 63 post","Main REDPOINT block. 5-7 quality attempts / crux links","Pull-ups + fixes + campus jugs + 3 core drills",[32,33,34,35,36],[68,69,81,40,41,42]],"9|Monday":["Max strength + power","Skip entirely if Sunday was demanding.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[2]],"9|Tuesday":["Max strength + power","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","85 climbing + 87 post","Route circuit. 3×3 hard repeats. 3 grade-5 problems × 3 rounds","20mm hangs + heavy pull-ups + 3-angle fixes + 3 core drills",[20,21,70,23,24],[25,82,83,84,85,30,31]],"9|Wednesday":["Max strength + power","Recovery before Thursday campus work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[5]],"9|Thursday":["Max strength + power","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","80 climbing + 78 post","Strength circuit. 3×3 limit. 3 grade-5 routes × 3 rounds + optional grade-6 crux","Campus grade-2/3 + slopers + pull-up power + fixes + 3 core drills",[6,7,86,9,10],[87,76,77,88,15,16,17]],"9|Friday":["Max strength + power","Never to failure; may skip.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[18]],"9|Saturday":["Max strength + power","Avoid heavy finger work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[19]],"10|Sunday":["Max strength + power","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","105 climbing + 63 post","Main REDPOINT block. 5-7 quality attempts / crux links","Pull-ups + fixes + campus jugs + 3 core drills",[32,33,34,35,36],[68,69,81,40,41,42]],"10|Monday":["Max strength + power","Skip entirely if Sunday was demanding.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[2]],"10|Tuesday":["Max strength + power","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","85 climbing + 87 post","Route circuit. 4×4 mixed. 3 grade-4 + 1 grade-5 problem × 4 rounds","20mm hangs + heavy pull-ups + 3-angle fixes + 3 core drills",[20,21,78,23,24],[25,82,83,84,85,30,31]],"10|Wednesday":["Max strength + power","Recovery before Thursday campus work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[5]],"10|Thursday":["Max strength + power","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","80 climbing + 78 post","Warm-up: full routes. 6-8 climbs","Campus grade-2/3 + slopers + pull-up power + fixes + 3 core drills",[6,7,89,9,10],[87,76,77,88,15,16,17]],"10|Friday":["Max strength + power","Never to failure; may skip.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[18]],"10|Saturday":["Max strength + power","Avoid heavy finger work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[19]],"11|Sunday":["Max strength + power","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","105 climbing + 63 post","Main REDPOINT block. 5-7 quality attempts / crux links","Pull-ups + fixes + campus jugs + 3 core drills",[32,33,34,35,36],[68,69,81,40,41,42]],"11|Monday":["Max strength + power","Skip entirely if Sunday was demanding.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[2]],"11|Tuesday":["Max strength + power","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","85 climbing + 87 post","Route circuit. 4×3 harder. 4 grade-5 problems × 3 rounds","20mm hangs + heavy pull-ups + 3-angle fixes + 3 core drills",[20,21,90,23,24],[25,82,83,84,85,30,31]],"11|Wednesday":["Max strength + power","Recovery before Thursday campus work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[5]],"11|Thursday":["Max strength + power","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","80 climbing + 78 post","Strength circuit. 3×3 limit. 3 grade-5 routes × 3 rounds + optional grade-6 crux","Campus grade-2/3 + slopers + pull-up power + fixes + 3 core drills",[6,7,86,9,10],[87,76,77,88,15,16,17]],"11|Friday":["Max strength + power","Never to failure; may skip.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[18]],"11|Saturday":["Max strength + power","Avoid heavy finger work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[19]],"12|Sunday":["Taper + assess","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","85 climbing + 26 post","Main REDPOINT block. 3-5 quality attempts","LIGHT / TAPER. lower volume + core; follow detailed tab",[32,33,91,92,36],[93,48,49,50]],"12|Monday":["Taper + assess","Skip entirely if Sunday was demanding.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[2]],"12|Tuesday":["Taper + assess","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","70 climbing + 38 post","Wall warm-up. 6-8 problems","LIGHT / TAPER. lower volume + core; follow detailed tab",[20,21,94,95,53],[54,96,56,57,58,59]],"12|Wednesday":["Taper + assess","Recovery before Thursday campus work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[5]],"12|Thursday":["Taper + assess","At least 60 minutes of actual wall climbing first. Campus and fingerboard work only after it.","70 climbing + 38 post","Warm-up: full routes. 6-8 climbs","LIGHT / TAPER. lower volume + core; follow detailed tab",[6,7,97,9,10],[62,63,64,65,66,67]],"12|Friday":["Taper + assess","Never to failure; may skip.","Optional","NO CLIMBING. Optional recovery day","Optional home-only TRX 20-25 min, or complete rest",[],[18]],"12|Saturday":["Taper + assess","Avoid heavy finger work.","Rest","NO CLIMBING. Rest","Rest, easy walking, nutrition and sleep",[],[19]]},"guide":[["CLIMBING","4×4 route circuit","Choose four steep problems around gym grade 4","Climb problem 1-4 with ~15-30sec transition; rest 3-4min; repeat entire circuit four rounds = 16 ascents.","Make one route grade 5, increase wall angle or reduce transition rest slightly.","If you cannot finish round 3 with form, replace hard route with grade 4 or reduce a round."],["CLIMBING","5×4 route circuit","Choose five grade-4 problems, all doable fresh","Five climbs in each round with brief transitions; complete 4 rounds = 20 ascents. THIS is 5×4, not 4×4.","Add one grade-5 route only after complete 20 ascents with quality.","Limit volume if total attempt quality falls sharply."],["CLIMBING","3×3 hard repeats","Three gym grade-5 problems","Climb each once with 2-3min rest; repeat all three for 3 rounds = 9 ascents.","Repeat an easier 6 crux link or make one problem harder.","Not a speed competition; protect good foot tension and lock-off quality."],["CLIMBING","Steep strength links","Grade 5-6 roof / overhang","Link 3-5 controlled moves emphasizing pulling and fix positions; full rest.","Lengthen link, reduce hold positivity, or add one more link.","No dedicated dyno or slab drills."],["CLIMBING","Sunday redpoint","One grade 6 project","Take 5-7 high-quality attempts with 4-6min rest; use links to learn crux.","Increase complexity or choose a new harder project after sending.","Stop when grip and accuracy deteriorate."],["POST / GRIP","Beastmaker 20mm main hang","20mm edge, two hands, half-crimp","Warm up with 3×5sec progressive hangs, then 5-6×8-10sec at RPE7-8 with 3min rest.","Add +1-2.5kg once the same sets are ≤RPE7 two sessions in a row.","No failure or max fatigued 10mm pocket holds; stay in a reproducible grip."],["POST / GRIP","Medium campus sloper static","Medium-size sloper rungs","Hang with both hands for 8-10sec; elbows and shoulders steady; 2-3min rest.","Increase seconds OR small load; not both.","Use easier jug or 20-25mm open-hand static if fingers fatigued."],["POST / CAMPUS","Campus grade-2 / grade-3 jug route","Only BIG positive holds with safe landing","Hand-over-hand ascend ~4-6 moves feet-off, 2.5-3min rest; no swinging or leaps.","Add one ascent or one controlled move when stable; do not rush to tiny holds.","If route doesn't have secure jugs, use large rungs or feet-on version. Stop for joint pain."],["POST / PULL","Full-range weighted pull-up","Pull-up bar; optional weight belt","Start near full extension, chin above bar, controlled down, no kipping.","If 5×6-8 is ≤RPE7 twice, add 1-2.5kg and work back to bottom of rep range.","Leave 1-2 clean reps in reserve; no shoulder shrug or grinding rep."],["POST / PULL","Pull-up POWER","Bar; BW / small load","Up fast and controlled; down 2 seconds; 4×4-6 with full rest.","Add small load only while reps stay fast.","Stop each set when speed drops; this is not fatigue/rebound training."],["POST / FIX","Full 3-angle fix","Two-hand big jugs or pull-up bar","Each ROUND: top lock for 6-8s, ~90° for 6-8s, ~120° for 6-8s. Two rounds per set.","Add 1sec/angle or small load only when the current effort ≤RPE7.","No sudden one-arm max locks, swinging or painful angles."],["POST / FIX","90° bilateral fix","Two-hand big jugs","Hold elbows ~90° for 8-12sec; 2-3min rest, clean scapular position.","Progress by 1-2sec or small added load.","Regress if body twists or elbows become sore."],["POST / CORE","Hanging knee raise","Bar / large jugs","Raise knees AND posteriorly tilt pelvis; 3×10-12 strict, avoid swing.","Progress to straight-leg raise or add paused top.","If hanging fatigues grip excessively, do weighted floor reverse crunch instead."],["POST / CORE","Weighted reverse crunch","Floor + optional light weight","Roll pelvis off ground slowly, then control lowering; 3×12-15.","Longer eccentric or light additional weight.","No momentum; low back control first."],["POST / CORE","Hollow rocks","Floor","Keep ribs tucked, low back in contact; 3×15-25 precise rocks.","Longer lever/held light plate over chest; 1sec pause at hardest point.","Shorten legs if losing position."],["POST / CORE","Weighted dead bug","Floor + dumbbell","Opposite arm/leg reach with ribs down; 3×10-12/side.","Slower 3sec lower or slightly heavier dumbbell.","No low-back arch."],["POST / CORE","Side-plank hip lift","Floor","3×10-12/side with a controlled 1sec pause at top.","Add light hip load or extend lever.","Choose forearm position that is comfortable."]]};
+const START = new Date(2026, 10, 1); // Sun 1 Nov 2026
+const ORDER = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const GYM = {Sunday:1,Tuesday:1,Thursday:1};
+const TITLES = {Sunday:'Redpoint + power',Tuesday:'Circuits + heavy grip',Thursday:'Repeats + campus',Monday:'Optional home TRX',Wednesday:'Rest',Friday:'Optional home TRX',Saturday:'Full rest'};
+const ICONS = {Sunday:'ph-mountains',Tuesday:'ph-hand-grabbing',Thursday:'ph-barbell',Monday:'ph-house-line',Wednesday:'ph-leaf',Friday:'ph-house-line',Saturday:'ph-moon-stars'};
+const PHASES = [
+  ['1-3','Base + build','Grade-4 4×4 and 5×4 circuits, grade-5 repeats, grade-6 Sunday redpoint.','20 mm half-crimp 5 × 10 sec, pull-ups 5 × 6-8, 3-angle fixes 3 × 2 rounds, core. Set loads so the last set is RPE 7-8.',[1,2,3]],
+  ['4','Deload','Fewer hard attempts, but at least 70 minutes of actual climbing.','About half the hard post sets, lighter fingerboard and core. RPE 5-6, no added weight. Campus optional and very easy.',[4]],
+  ['5-7','Hypertrophy + strength','Hard grade-5 repeats and mixed-grade 4×4 / 5×4 circuits.','Half-crimp 6 × 8-10 sec, hard pull-ups 5 × 6-8, fixes 4 × 2 rounds, harder core. RPE 8-9 with 1-2 clean reps in reserve.',[5,6,7]],
+  ['8','Deload','Easier routes and less volume, at least 70 minutes on the wall.','Light hangs, 2 pull-up sets, light fixes and core. RPE 5-6, no test day.',[8]],
+  ['9-11','Max strength + power','Hard grade-5 repeats, grade-6 links and Sunday projecting.','20 mm 5 × 8 sec, weighted pull-ups 5 × 4-6, big-jug campus, 90° fixes. Progress weight or pull speed, never uncontrolled campus jumps.',[9,10,11]],
+  ['12','Taper + assess','Less volume. Prioritize Sunday grade-6 performance.','Fewer hangs and pull-ups, short core, optional easy campus. Compare 20 mm and pull-ups only if fully recovered.',[12]]
+];
+const RPE = [
+  ['1-3','Very easy','Warm-up or recovery',2],
+  ['4-5','Easy','Comfortable, plenty of strength remaining',4.5],
+  ['6','Moderate','Could do about 4 more reps',6],
+  ['7','Challenging','Could do about 3 more reps',7],
+  ['8','Hard','Could do about 2 more reps',8],
+  ['9','Very hard','Could do about 1 more rep',9],
+  ['10','Maximum','No additional reps possible',10]
+];
+const BENCH = {
+  1:'Baseline: 74 kg, 8 strict pull-ups, all gym grade-4 problems and most grade 5s; grade 6 is hard. Log what you actually lift.',
+  4:'Repeat the same 20 mm hold duration, strict pull-up form, 3-angle fix position and gym grades. Don\'t test maximally when tired.',
+  8:'Repeat the same 20 mm hold duration, strict pull-up form, 3-angle fix position and gym grades. Compare with your Load Log.',
+  12:'Final check: the same 20 mm hold, strict pull-ups, 3-angle fixes and gym grades, only if fully recovered.'
+};
+const GUIDE_MAP = [['historical',null],['finish',null],['before post',null],['beastmaker','beastmaker 20mm'],['5×4','5×4 route'],['4×4','4×4 route'],['3×3','3×3 hard'],['strength circuit','3×3 hard'],['route circuit','4×4 route'],['repeaters','3×3 hard'],['redpoint','sunday redpoint'],['strength links','steep strength links'],['strength moves','steep strength links'],['half-crimp','beastmaker 20mm'],['20mm','beastmaker 20mm'],['sloper','medium campus sloper'],['open-hand','medium campus sloper'],['campus','campus grade-2'],['power','pull-up power'],['speed','pull-up power'],['pull-up','full-range weighted'],['90°','90° bilateral'],['3-angle','full 3-angle'],['3 angles','full 3-angle'],['three-angle','full 3-angle'],['knee','hanging knee'],['reverse crunch','weighted reverse'],['hollow','hollow rocks'],['dead bug','weighted dead bug'],['side plank','side-plank hip']];
+
+const KEY='r7c.done.v2', OLD_KEY='r7c.done.v1';
+// Days already completed when the plan was re-dated to start Sun 1 Nov: Sun 1 Nov and Tue 3 Nov.
+const SEED=[0,2];
+// Version 5 records W2 Sunday (Nov 8) as done too. Applied once per device; the server applies it to the shared copy.
+const SEED5=7, SEED5_KEY='r7c.seed.v5';
+let done = load();
+function load(){
+  try{
+    const v=localStorage.getItem(KEY); if(v!==null) return new Set(JSON.parse(v));
+    // v1 counted days from Tue 3 Nov; v2 counts from Sun 1 Nov, so shift by 2.
+    const old=JSON.parse(localStorage.getItem(OLD_KEY)||'[]');
+    const s=new Set([...SEED,...old.map(i=>i+2).filter(i=>i<84)]);
+    localStorage.setItem(KEY,JSON.stringify([...s])); return s;
+  }catch(e){return new Set(SEED)}
+}
+function store(){try{localStorage.setItem(KEY,JSON.stringify([...done]))}catch(e){}}
+function save(){store(); edits++; setDirty(true); push()}
+
+/* Load log: what was actually done on each gym day, keyed by day index. */
+const LOG_KEY='r7c.log.v1';
+const SEED_LOG={
+  0:{no:'Completed redpoint day.'},
+  7:{no:'Nov 8 redpoint session completed. The old post workout felt too easy.'},
+  2:{pk:'0',pr:'5 × 5 BW',pp:'5.5',fs:'5',fr:'4.5',no:'10 mm 3-finger pockets 10 × 8+ sec at RPE 4-5 (not comparable to the 20 mm load). 3-angle lock-offs 3 sets × 2 rounds × 5 sec at RPE 4-5. Shoulder good.'}
+};
+// [label, input mode, placeholder, short label for the overview]
+const LF={
+  hk:['Added kg','decimal','BW = 0','Hang'], hs:['Sets × sec','text','e.g. 5 × 10s','Sets'], hr:['RPE','decimal','1-10','RPE'],
+  pk:['Added kg','decimal','BW = 0','Pull-ups'], pr:['Sets × reps','text','e.g. 5 × 6','Reps'], pp:['RPE','decimal','1-10','RPE'],
+  fs:['Sec per angle','decimal','sec','Fix'], fr:['RPE','decimal','1-10','RPE'],
+  ca:['Campus ascents','numeric','count','Campus'], ss:['Sloper hold sec','decimal','sec','Sloper'],
+  cs:['Core hard sets','numeric','sets','Core sets'], bw:['Body weight kg','decimal','kg','Body weight'],
+  no:['Notes / next day','area','How it felt, and how fingers and elbows felt the next day','Notes'],
+  // Fields from earlier versions, shown only on days that already have them.
+  rr:['Heavy row RPE','decimal','1-10',''], sp:['During session','','','Shoulder'], sn:['Next day','','','Next day'],
+  fn:['Finger / elbow notes','area','','Fingers']
+};
+const LG={
+  hang:['20 mm hangs','ph-hand-grabbing',['hk','hs','hr']],
+  pull:['Pull-ups','ph-arrow-fat-up',['pk','pr','pp']],
+  fix:['Fixes','ph-timer',['fs','fr']],
+  campus:['Campus','ph-ladder',['ca']],
+  campusS:['Campus and slopers','ph-ladder',['ca','ss']],
+  core:['Core and body weight','ph-barbell',['cs','bw']],
+  notes:['Notes','ph-note-pencil',['no']],
+  old:['Earlier entries','ph-clock-counter-clockwise',[]],
+  sh:['Shoulder pain','ph-first-aid',['sp','sn'],'0-10, earlier entries']
+};
+const LOG_DAYS={Sunday:['pull','fix','campus','core','notes'],Tuesday:['hang','pull','fix','core','notes'],Thursday:['pull','fix','campusS','core','notes']};
+let log=loadLog();
+try{ if(!localStorage.getItem(SEED5_KEY)){ done.add(SEED5); if(!log[SEED5]) log[SEED5]={...SEED_LOG[SEED5]}; store(); storeLog(); localStorage.setItem(SEED5_KEY,'1') } }catch(e){}
+function normLog(o){
+  const out={}; if(!o||typeof o!=='object') return out;
+  for(const [k,v] of Object.entries(o)){ const i=+k; if(!(i>=0&&i<84)||!v||typeof v!=='object') continue;
+    const e={}; for(const [f,x] of Object.entries(v)) if(LF[f]&&typeof x==='string'&&x.trim()) e[f]=x.slice(0,1000);
+    if(Object.keys(e).length) out[i]=e; }
+  return out;
+}
+function loadLog(){
+  try{ const v=localStorage.getItem(LOG_KEY); if(v!==null) return normLog(JSON.parse(v));
+    const s=normLog(SEED_LOG); localStorage.setItem(LOG_KEY,JSON.stringify(s)); return s; }
+  catch(e){return normLog(SEED_LOG)}
+}
+function storeLog(){try{localStorage.setItem(LOG_KEY,JSON.stringify(log))}catch(e){}}
+let logTimer=null;
+function setLog(id,f,val){
+  const e=log[id]||{}; val=val.trim()?val:'';
+  if(val) e[f]=val.slice(0,1000); else delete e[f];
+  if(Object.keys(e).length) log[id]=e; else delete log[id];
+  storeLog(); edits++; setDirty(true);
+  logState(id,'Saving');
+  clearTimeout(logTimer); logTimer=setTimeout(()=>{push().then(()=>logState(id, canSync&&!isDirty()?'Saved':'Saved on this device'))},700);
+  const li=document.getElementById('d'+id); if(li){const m=li.querySelector('.lg-mark'); const has=!!log[id]; if(m&&!has) m.remove(); else if(!m&&has) li.querySelector('.d-meta').insertAdjacentHTML('afterbegin',LOG_MARK)}
+}
+const LOG_MARK='<i class="ph ph-notebook lg-mark" title="Load logged" aria-label="Load logged"></i>';
+function logState(id,t){const el=document.getElementById('ls'+id); if(el){el.textContent=t; el.classList.toggle('ok',t.startsWith('Saved'))}}
+function painMsg(v){ if(v==='') return ''; v=+v; return v<=2?'Fine if it settles quickly.':v===3?'Regress next time. Do not push through.':'Stop that exercise. Reassess if it persists.' }
+function painCls(n){return n<=2?'':n===3?'p2':'p3'}
+function logHTML(id,day){
+  const e=log[id]||{};
+  const field=(f,old)=>{let [l,m,ph,short]=LF[f], v=esc(e[f]||''); if(old&&short&&short!==l&&!l.startsWith(short)) l=`${short}: ${l.toLowerCase()}`;
+    if(m==='area') return `<label>${l}<textarea data-log="${id}" data-f="${f}" rows="2" placeholder="${esc(ph)}">${v}</textarea></label>`;
+    return `<label>${l}<input data-log="${id}" data-f="${f}" inputmode="${m}" enterkeyhint="next" autocomplete="off" placeholder="${esc(ph)}" value="${v}"></label>`};
+  const pain=f=>{const v=e[f]??''; let b='';
+    for(let n=0;n<=10;n++) b+=`<button type="button" class="${painCls(n)}" data-pain="${id}" data-f="${f}" data-v="${n}" aria-pressed="${v===String(n)}" aria-label="${LF[f][0]} pain ${n} of 10">${n}</button>`;
+    return `<div class="pain-row"><span>${LF[f][0]}</span><div class="scale" role="group" aria-label="${LF[f][0]} pain">${b}</div><span class="pain-msg" id="pm${id}${f}">${painMsg(v)}</span></div>`};
+  // Values from earlier plan versions that this day's form no longer asks for stay visible and editable.
+  const shown=new Set(LOG_DAYS[day].flatMap(g=>LG[g][2]));
+  const oldF=Object.keys(LF).filter(f=>e[f]&&!shown.has(f)&&f!=='sp'&&f!=='sn');
+  const extra=[...(oldF.length?['old']:[]),...(e.sp||e.sn?['sh']:[])];
+  const groups=[...LOG_DAYS[day],...extra].map(g=>{let [t,ic,fs,sub]=LG[g]; if(g==='old') fs=oldF;
+    const body = g==='sh' ? fs.map(pain).join('') : `<div class="lf${g==='notes'?' wide':''}" style="--n:${fs.length}">${fs.map(f=>field(f,g==='old')).join('')}</div>`;
+    return `<div class="lg" role="group" aria-label="${t}"><h4><i class="ph ${ic}"></i>${t}${sub?` <small>${sub}</small>`:''}</h4>${body}</div>`}).join('');
+  return `<div class="sec"><div class="sec-h"><span class="ico"><i class="ph ph-notebook"></i></span><h3>Load log</h3><small class="mono log-state" id="ls${id}">${log[id]?'Logged':''}</small></div>
+    <p class="log-hint">Record what you actually did after each session. Leave anything you didn't measure blank; never test maximally just to fill it in.</p>${groups}</div>`;
+}
+function renderLogList(){
+  const el=document.getElementById('logList'); const ids=Object.keys(log).map(Number).sort((a,b)=>a-b);
+  if(!ids.length){el.innerHTML='<div class="ll-empty">Nothing logged yet. Open a gym day and fill in its Load log after the session.</div>'; return}
+  let h='', lastW=0;
+  for(const id of ids){
+    const w=Math.floor(id/7)+1, day=ORDER[id%7], e=log[id], dt=dateOf(w,id%7);
+    if(w!==lastW){h+=`<div class="ll-w">WEEK ${w}</div>`; lastW=w}
+    const chips=[];
+    const kg=v=>v===undefined?'':(/^[0-9.,]+$/.test(v)?(+v.replace(',','.')?`+${v} kg`:'BW'):v);
+    if(e.hk||e.hs||e.hr) chips.push(['Hang',[kg(e.hk),e.hs,e.hr&&'RPE '+e.hr].filter(Boolean).join(' · ')]);
+    if(e.pk||e.pr||e.pp) chips.push(['Pull-ups',[kg(e.pk),e.pr,e.pp&&'RPE '+e.pp].filter(Boolean).join(' · ')]);
+    if(e.fs||e.fr) chips.push(['Fix',[e.fs&&e.fs+' s/angle',e.fr&&'RPE '+e.fr].filter(Boolean).join(' · ')]);
+    if(e.ca) chips.push(['Campus',e.ca+' ascents']); if(e.ss) chips.push(['Sloper',e.ss+' s']); if(e.cs) chips.push(['Core',e.cs+' sets']); if(e.bw) chips.push(['BW',e.bw+' kg']); if(e.rr) chips.push(['Rows','RPE '+e.rr]);
+    if(e.sp||e.sn) chips.push(['Shoulder',[e.sp??'-',e.sn??'-'].join(' → ')+' /10']);
+    const notes=[e.fn,e.no].filter(Boolean).join(' ');
+    h+=`<button class="ll-row" data-goto="${id}"><strong>${TITLES[day]}<span>${fmtD(dt,{weekday:'short',month:'short',day:'numeric'})}</span></strong>${chips.length?`<ul>${chips.map(c=>`<li><em>${c[0]}</em>${esc(c[1])}</li>`).join('')}</ul>`:''}${notes?`<p>${esc(notes)}</p>`:''}</button>`;
+  }
+  el.innerHTML=h;
+}
+
+/* Sync: progress lives in sync.php on the server so every device shows the same ticks.
+   Local storage is the offline copy; unsent changes are pushed when the connection returns. */
+const SYNC_URL='sync.php', SYNC_KEY='7c3eafdd3f8563d6ff263148738f00b9', DIRTY='r7c.dirty';
+const canSync=location.protocol.startsWith('http');
+let edits=0, pushing=false, pushAgain=false;
+function isDirty(){try{return localStorage.getItem(DIRTY)==='1'}catch(e){return false}}
+function setDirty(v){try{v?localStorage.setItem(DIRTY,'1'):localStorage.removeItem(DIRTY)}catch(e){}}
+function note(ok){const el=document.getElementById('syncNote'); if(el) el.textContent=ok?'Progress syncs across your devices.':'Offline right now. Ticks and logs are saved on this device and will sync when you reconnect.'}
+async function api(body){
+  const r=await fetch(SYNC_URL,{method:body?'POST':'GET',cache:'no-store',headers:{'X-Sync-Key':SYNC_KEY,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+  if(!r.ok) throw new Error(r.status); return r.json();
+}
+async function push(){
+  if(!canSync) return;
+  if(pushing){pushAgain=true; return}
+  pushing=true;
+  try{ do{ pushAgain=false; await api({done:[...done],log}); }while(pushAgain); setDirty(false); note(true) }
+  catch(e){ note(false) }
+  finally{ pushing=false }
+}
+async function pull(){
+  if(!canSync) return;
+  if(isDirty()) return push();
+  const seq=edits;
+  try{
+    const s=await api();
+    note(true);
+    if(seq!==edits||isDirty()) return;
+    if(!s.updated){ if(done.size||Object.keys(log).length) push(); return }
+    const next=new Set(s.done||[]), nextLog=normLog(s.log);
+    const sameDone=next.size===done.size&&[...next].every(i=>done.has(i));
+    const sameLog=JSON.stringify(nextLog)===JSON.stringify(log);
+    if(sameDone&&sameLog) return;
+    done=next; log=nextLog; store(); storeLog();
+    const a=document.activeElement, keep=a&&a.dataset&&a.dataset.log?[a.dataset.log,a.dataset.f]:null;
+    renderWeeks(); renderWeek(); renderStats();
+    if(document.getElementById('sheetLog').classList.contains('on')) renderLogList();
+    if(keep){const f=document.querySelector(`[data-log="${keep[0]}"][data-f="${keep[1]}"]`); if(f) f.focus({preventScroll:true})}
+  }catch(e){ note(false) }
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pull()});
+addEventListener('online',pull);
+addEventListener('focus',pull);
+
+const MS=86400000;
+const fmtD = (d,o)=>d.toLocaleDateString('en-US',o);
+const dateOf=(w,i)=>new Date(START.getTime()+((w-1)*7+i)*MS + 3*3600000);
+const idOf=(w,i)=>(w-1)*7+i;
+const today=new Date(); today.setHours(0,0,0,0);
+const todayIdx=Math.round((today-START)/MS);
+const curWeek = todayIdx<0?1:todayIdx>83?12:Math.floor(todayIdx/7)+1;
+let sel = curWeek;
+let open = new Set(todayIdx>=0&&todayIdx<84?[todayIdx]:[]);
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function guideFor(name){
+  const n=name.toLowerCase();
+  for(const [a,b] of GUIDE_MAP){ if(n.includes(a)){ if(!b) return null; const g=DATA.guide.find(x=>x[1].toLowerCase().includes(b)); if(g) return g; } }
+  return null;
+}
+function chip(label,val,cls=''){return val?`<span class="chip ${cls}"><em>${label}</em>${esc(val)}</span>`:''}
+function exHTML(k,uid){
+  const [n,s,r,rest,i,how,safe,,grade]=DATA.ex[k];
+  const g=guideFor(n);
+  return `<li class="exi"><h4>${esc(n)}</h4>
+  <div class="chips">${chip('Sets',s)}${/^grades? /i.test(grade)?chip('Grade',grade.replace(/^grades? /i,'')):chip('Setup',grade)}${chip('Reps',r)}${chip('Rest',rest)}${i?(/RPE/.test(i)?`<button class="chip rpe" data-rpe aria-label="${esc(i)}, what does this mean">${esc(i)}</button>`:`<span class="chip rpe">${esc(i)}</span>`):''}</div>
+  ${how?`<p class="how">${esc(how)}</p>`:''}
+  ${safe?`<p class="safe"><i class="ph ph-first-aid"></i><span>${esc(safe)}</span></p>`:''}
+  ${g?`<button class="tech" aria-expanded="false" data-tech="${uid}">Technique<i class="ph ph-caret-right"></i></button>
+  <div class="tech-body" id="t${uid}"><span><b>Setup.</b> ${esc(g[2])}</span><span><b>Do it.</b> ${esc(g[3])}</span><span><b>Progress.</b> ${esc(g[4])}</span><span><b>Safety.</b> ${esc(g[5])}</span></div>`:''}
+  </li>`;
+}
+
+function renderWeeks(){
+  const el=document.getElementById('weeks'); let h='';
+  for(let w=1;w<=12;w++){
+    let c=0; for(let i=0;i<7;i++) if(done.has(idOf(w,i))) c++;
+    h+=`<button class="wk${w===sel?' sel':''}${w===curWeek&&todayIdx>=0&&todayIdx<84?' now':''}" data-w="${w}" aria-label="Week ${w}, ${c} of 7 done" aria-current="${w===sel}"><span class="n">W${w}</span><span class="bar"><i style="width:${c/7*100}%"></i></span></button>`;
+  }
+  el.innerHTML=h;
+  const s=el.querySelector('.sel'); if(s) el.scrollTo({left:s.offsetLeft-el.clientWidth/2+s.offsetWidth/2,behavior:'smooth'});
+}
+
+function renderWeek(){
+  const w=sel, first=DATA.days[`${w}|Tuesday`], phase=first[0];
+  const p=PHASES.find(x=>x[4].includes(w));
+  const a=dateOf(w,0), b=dateOf(w,6);
+  let c=0; for(let i=0;i<7;i++) if(done.has(idOf(w,i))) c++;
+  document.getElementById('weekHead').innerHTML=`
+    <div class="phase-lbl">${esc(phase)}</div>
+    <h2>Week ${w}</h2>
+    <p class="range">${fmtD(a,{weekday:'short',month:'short',day:'numeric'})} to ${fmtD(b,{weekday:'short',month:'short',day:'numeric'})} <span class="mono">· ${c}/7 done</span></p>
+    <div class="phase-card"><div><span>Climbing</span><p>${esc(p[2])}</p></div><div><span>Post-climbing</span><p>${esc(p[3])}</p></div></div>
+    ${BENCH[w]?`<div class="bench"><i class="ph ph-target"></i><p><b>Benchmark week.</b> ${esc(BENCH[w])}</p></div>`:''}`;
+  let h='';
+  ORDER.forEach((day,i)=>{
+    const id=idOf(w,i), d=DATA.days[`${w}|${day}`], dt=dateOf(w,i);
+    const [ , focus, time, climbSum, postSum, climb, post]=d;
+    const isT=id===todayIdx, isD=done.has(id), isO=open.has(id);
+    const sum = ((GYM[day] ? climbSum.replace(/^(\d+ min )?PURE[^:]*: /,'') : postSum.replace(/^(HOME|POST( \(\d+ min\))?):? ?/,''))).replace(/^./,c=>c.toUpperCase());
+    const deload = GYM[day] && /deload/i.test(d[0]);
+    const mins = a=>a.reduce((s,k)=>s+(+DATA.ex[k][7]||0),0);
+    const tm=time.match(/(\d+) climbing \+ (\d+) post/);
+    const cm=tm?+tm[1]:mins(climb), pm=tm?+tm[2]:mins(post);
+    const tot = GYM[day] ? `${cm+pm} min` : time;
+    const gate = GYM[day] ? focus : '';
+    h+=`<li class="day${isD?' done':''}${isT?' is-today':''}${isO?' open':''}" id="d${id}" data-id="${id}">
+      <div class="d-head">
+        <button class="check" data-check="${id}" aria-pressed="${isD}" aria-label="Mark ${day} ${fmtD(dt,{month:'long',day:'numeric'})} complete"><span class="c"><i class="ph-bold ph-check"></i></span></button>
+        <button class="d-tap" data-open="${id}" aria-expanded="${isO}" aria-controls="p${id}">
+          <span class="date"><span class="dw">${fmtD(dt,{weekday:'short'})}</span><span class="dn mono">${dt.getDate()}</span><span class="dm">${fmtD(dt,{month:'short'})}</span></span>
+          <span class="d-body-top"><span class="d-title">${TITLES[day]}${isT?'<span class="tag-today">Today</span>':''}</span><span class="d-sum">${esc(sum)}</span></span>
+          <span class="d-meta">${log[id]?LOG_MARK:''}<span class="tm mono">${esc(tot)}</span><i class="ph ph-caret-down chev"></i></span>
+        </button>
+      </div>
+      <div class="d-panel" id="p${id}"><div><div class="d-inner">
+        <div class="d-info">${GYM[day]?'':`<span class="pill"><i class="ph ${ICONS[day]}"></i>${esc(focus)}</span>`}<span class="pill"><i class="ph ph-timer"></i>${GYM[day]?`${cm+pm} min total`:esc(time)}</span>${GYM[day]?`<span class="pill"><i class="ph ph-mountains"></i>${cm} min pure climbing</span>`:''}${deload?'<span class="pill"><i class="ph ph-trend-down"></i>Deload week</span>':''}</div>${gate?`<p class="gate"><i class="ph ph-info"></i><span>${esc(gate)}</span></p>`:''}
+        <div class="sec"><div class="sec-h"><span class="ico"><i class="ph ph-mountains"></i></span><h3>Climbing</h3>${climb.length?`<small class="mono">${cm} min</small>`:''}</div>
+          ${climb.length?`<ol class="ex">${climb.map((k,j)=>exHTML(k,`${id}c${j}`)).join('')}</ol>`:`<div class="rest-note"><i class="ph ph-prohibit"></i>${esc(climbSum)}</div>`}
+        </div>
+        <div class="sec"><div class="sec-h"><span class="ico"><i class="ph ph-barbell"></i></span><h3>Post-climbing</h3>${post.length?`<small class="mono">${pm?pm+' min':post.length+' items'}</small>`:''}</div>
+          <ol class="ex">${post.map((k,j)=>exHTML(k,`${id}p${j}`)).join('')}</ol>
+        </div>
+        ${LOG_DAYS[day]?logHTML(id,day):''}
+        <button class="done-row" data-check="${id}"><i class="ph-bold ph-check"></i><span>${isD?'Completed':'Mark day complete'}</span></button>
+      </div></div></div>
+    </li>`;
+  });
+  document.getElementById('days').innerHTML=h;
+  document.getElementById('prevW').disabled=w===1;
+  document.getElementById('nextW').disabled=w===12;
+}
+
+function renderStats(){
+  const n=done.size, pct=Math.round(n/84*100);
+  document.getElementById('pct').textContent=pct+'%';
+  document.getElementById('ringVal').style.strokeDashoffset=276.46*(1-n/84);
+  document.getElementById('sDone').textContent=n;
+  let core=0; for(let w=1;w<=12;w++) ORDER.forEach((d,i)=>{if(GYM[d]&&done.has(idOf(w,i)))core++});
+  document.getElementById('sCore').textContent=core+'/36';
+  let s=0, i=Math.min(todayIdx,83); if(i>=0&&!done.has(i)) i--; while(i>=0&&done.has(i)){s++;i--}
+  document.getElementById('sStreak').textContent=s;
+  const lbl=document.getElementById('todayLbl'), sub=document.getElementById('todaySub');
+  if(todayIdx<0){lbl.textContent='Plan starts Sun 1 Nov';sub.textContent='Week 1'}
+  else if(todayIdx>83){lbl.textContent='Plan complete';sub.textContent='Review week 12'}
+  else{const day=ORDER[todayIdx%7]; lbl.textContent=`Today: ${TITLES[day]}`; sub.textContent=`W${curWeek} · Day ${todayIdx+1}`}
+  document.getElementById('subline').textContent=`12-week climbing plan, ${fmtD(START,{month:'short',day:'numeric'})} to ${fmtD(dateOf(12,6),{month:'short',day:'numeric',year:'numeric'})}. Pure wall climbing first, then post-climbing work.`;
+}
+
+function toggle(id){
+  const was=done.has(id); was?done.delete(id):done.add(id); save();
+  const li=document.getElementById('d'+id);
+  if(li){li.classList.toggle('done',!was); li.querySelectorAll('[data-check]').forEach(b=>b.setAttribute('aria-pressed',!was)); const t=li.querySelector('.done-row span'); if(t)t.textContent=!was?'Completed':'Mark day complete';}
+  if(!was && navigator.vibrate) try{navigator.vibrate(12)}catch(e){}
+  renderWeeks(); renderStats(); updWeekCount();
+  if(!was){ let c=0; for(let i=0;i<7;i++) if(done.has(idOf(sel,i))) c++; toast(c===7?`Week ${sel} complete`:'Day complete'); }
+}
+function updWeekCount(){const r=document.querySelector('.week-head .range .mono'); if(r){let c=0;for(let i=0;i<7;i++) if(done.has(idOf(sel,i)))c++; r.textContent=`· ${c}/7 done`}}
+function setOpen(id){
+  const li=document.getElementById('d'+id); const on=!open.has(id);
+  on?open.add(id):open.delete(id); li.classList.toggle('open',on); li.querySelector('.d-tap').setAttribute('aria-expanded',on);
+}
+function goWeek(w,scrollTop=true){sel=Math.max(1,Math.min(12,w)); renderWeeks(); renderWeek(); if(scrollTop) document.getElementById('weekHead').scrollIntoView({behavior:'smooth',block:'start'})}
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-check],[data-open],[data-w],[data-tech],[data-close],[data-rpe],[data-pain],[data-goto]'); if(!t) return;
+  if(t.dataset.pain!==undefined){ const id=+t.dataset.pain, f=t.dataset.f, on=t.getAttribute('aria-pressed')!=='true';
+    t.parentNode.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===t&&on));
+    const v=on?t.dataset.v:''; setLog(id,f,v); const m=document.getElementById('pm'+id+f); if(m) m.textContent=painMsg(v); return }
+  if(t.dataset.goto!==undefined){ const id=+t.dataset.goto; closeSheets(); sel=Math.floor(id/7)+1; open.add(id); renderWeeks(); renderWeek();
+    setTimeout(()=>document.getElementById('d'+id).scrollIntoView({behavior:'smooth',block:'start'}),60); return }
+  if(t.dataset.rpe!==undefined){openSheet('sheetRpe'); return}
+  if(t.dataset.check!==undefined) toggle(+t.dataset.check);
+  else if(t.dataset.open!==undefined) setOpen(+t.dataset.open);
+  else if(t.dataset.w) goWeek(+t.dataset.w);
+  else if(t.dataset.tech){const b=document.getElementById('t'+t.dataset.tech); const on=!b.classList.contains('show'); b.classList.toggle('show',on); t.setAttribute('aria-expanded',on)}
+  else if(t.dataset.close!==undefined) closeSheets();
+});
+document.getElementById('prevW').onclick=()=>goWeek(sel-1);
+document.getElementById('nextW').onclick=()=>goWeek(sel+1);
+document.getElementById('btnToday').onclick=()=>{
+  const id=Math.max(0,Math.min(83,todayIdx)); sel=Math.floor(id/7)+1;
+  if(!open.has(id)) open.add(id); renderWeeks(); renderWeek();
+  document.getElementById('d'+id).scrollIntoView({behavior:'smooth',block:'start'});
+};
+
+/* Theme */
+const TK='r7c.theme';
+function applyTheme(t){ if(t) document.documentElement.dataset.theme=t; else delete document.documentElement.dataset.theme; const dark=t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches; document.querySelector('#btnTheme i').className='ph '+(dark?'ph-sun':'ph-moon'); }
+try{applyTheme(localStorage.getItem(TK))}catch(e){applyTheme(null)}
+document.getElementById('btnTheme').onclick=()=>{const dark=getComputedStyle(document.documentElement).colorScheme==='dark'; const t=dark?'light':'dark'; applyTheme(t); try{localStorage.setItem(TK,t)}catch(e){}};
+
+/* Sheets */
+const scrim=document.getElementById('scrim');
+let lastFocus=null;
+function openSheet(id){lastFocus=document.activeElement; scrim.classList.add('on'); const s=document.getElementById(id); s.classList.add('on'); s.querySelector('[data-close]').focus({preventScroll:true}); document.body.style.overflow='hidden'}
+function closeSheets(){scrim.classList.remove('on'); document.querySelectorAll('.sheet.on').forEach(s=>s.classList.remove('on')); document.body.style.overflow=''; if(lastFocus) lastFocus.focus({preventScroll:true})}
+scrim.onclick=closeSheets;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheets()});
+document.getElementById('btnRules').onclick=()=>openSheet('sheetRules');
+document.getElementById('btnRpe').onclick=()=>openSheet('sheetRpe');
+document.getElementById('btnLog').onclick=()=>{renderLogList(); openSheet('sheetLog')};
+document.addEventListener('input',e=>{const t=e.target; if(t.dataset&&t.dataset.log!==undefined) setLog(+t.dataset.log,t.dataset.f,t.value)});
+document.getElementById('phaseList').innerHTML=PHASES.map(p=>`<div><b>W${p[0]}</b><p>${p[1]}<small>Climbing: ${p[2]} Post: ${p[3]}</small></p></div>`).join('');
+document.getElementById('rpeScale').innerHTML=RPE.map(r=>`<div class="rpe-row"><b>${r[0]}</b><div><strong>${r[1]}</strong><div class="rpe-bar"><i style="width:${r[3]*10}%"></i></div></div><span>${r[2]}</span></div>`).join('');
+
+/* Swipe the sheet down to dismiss (mobile) */
+document.querySelectorAll('.sheet').forEach(s=>{
+  let y0=null,dy=0,t0=0;
+  s.addEventListener('pointerdown',e=>{if(innerWidth>=720||e.pointerType==='mouse'||s.scrollTop>0)return; if(e.target.closest('input,button'))return; y0=e.clientY;t0=performance.now();dy=0;s.style.transition='none'});
+  s.addEventListener('pointermove',e=>{if(y0===null)return; dy=Math.max(0,e.clientY-y0); s.style.transform=`translateY(${dy}px)`});
+  const end=()=>{if(y0===null)return; const v=dy/Math.max(1,performance.now()-t0); s.style.transition=''; s.style.transform=''; if(dy>120||v>.6) closeSheets(); y0=null};
+  s.addEventListener('pointerup',end); s.addEventListener('pointercancel',end);
+});
+
+
+let tt; function toast(t){const el=document.getElementById('toast'); el.textContent=t; el.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('on'),1600)}
+
+renderWeeks(); renderWeek(); renderStats(); pull();
+</script>
+</body>
+</html>

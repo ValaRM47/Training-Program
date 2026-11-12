@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>گزارش سئو نوین پارسیان</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1b2430; --muted:#5b6675; --line:#e3e7ec; --bg:#ffffff; --soft:#f5f7fa;
+  --brand:#0f4c81; --brand-soft:#e7f0f8;
+  --red:#b42318; --red-soft:#fdecea; --amber:#b54708; --amber-soft:#fef4e6;
+  --green:#067647; --green-soft:#e8f6ee; --violet:#5b3fa8; --violet-soft:#efeafb;
+}
+@page{size:A4;margin:16mm 14mm 16mm 14mm}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:Vazirmatn,Tahoma,sans-serif;font-size:10.5pt;line-height:1.85;margin:0}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+code,.en{font-family:ui-monospace,Menlo,Consolas,monospace;direction:ltr;unicode-bidi:embed;font-size:8.6pt;background:var(--soft);padding:1px 5px;border-radius:4px;word-break:break-all}
+h1,h2,h3{line-height:1.5;margin:0}
+h2{font-size:15pt;font-weight:800;color:var(--brand);margin:30px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--brand-soft);break-after:avoid}
+h3{font-size:11.5pt;font-weight:800;margin:18px 0 6px;break-after:avoid}
+p{margin:6px 0 10px}
+ul{margin:4px 0 10px;padding-right:20px}
+li{margin:3px 0}
+.muted{color:var(--muted)}
+/* cover */
+.cover{min-height:255mm;display:flex;flex-direction:column;justify-content:space-between;padding:22mm 4mm 6mm;break-after:page}
+.cover .tag{display:inline-block;background:var(--brand-soft);color:var(--brand);font-weight:600;padding:4px 12px;border-radius:20px;font-size:9.5pt}
+.cover h1{font-size:30pt;font-weight:800;margin:18px 0 6px;color:var(--ink)}
+.cover .sub{font-size:13pt;color:var(--muted);font-weight:400}
+.cover .meta{border-top:1px solid var(--line);padding-top:14px;font-size:9.5pt;color:var(--muted);display:grid;grid-template-columns:1fr 1fr;gap:6px 20px}
+.cover .meta b{color:var(--ink);font-weight:600}
+.cover .bar{height:6px;width:90px;background:var(--brand);border-radius:3px;margin-top:28px}
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0 6px}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--soft)}
+.kpi .l{font-size:8.5pt;color:var(--muted)}
+.kpi .v{font-size:17pt;font-weight:800;line-height:1.3}
+.kpi .d{font-size:8.5pt}
+.down{color:var(--red)} .up{color:var(--green)}
+/* score */
+.score{display:flex;gap:16px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;break-inside:avoid}
+.score .n{direction:ltr;font-size:30pt;font-weight:800;color:var(--amber);line-height:1}
+.score .n small{font-size:12pt;color:var(--muted)}
+/* callouts */
+.call{border-radius:10px;padding:10px 14px;margin:10px 0;break-inside:avoid;border:1px solid}
+.call.red{background:var(--red-soft);border-color:#f5c2bd}
+.call.green{background:var(--green-soft);border-color:#b7e2c8}
+.call.blue{background:var(--brand-soft);border-color:#c4d9ec}
+.call b.t{display:block;margin-bottom:2px}
+/* tables */
+table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:9.2pt;break-inside:auto}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:right;vertical-align:top}
+th{background:var(--soft);font-weight:600;color:var(--muted);font-size:8.6pt}
+tr{break-inside:avoid}
+td.num,th.num{text-align:left;direction:ltr;white-space:nowrap;font-variant-numeric:tabular-nums}
+/* issues */
+.issue{border:1px solid var(--line);border-right:5px solid var(--line);border-radius:8px;padding:10px 14px;margin:10px 0;break-inside:avoid}
+.issue.crit{border-right-color:var(--red)}
+.issue.high{border-right-color:var(--amber)}
+.issue.med{border-right-color:#c9a227}
+.issue .hd{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.issue .hd b{font-size:10.8pt}
+.pill{font-size:8pt;font-weight:600;padding:1px 9px;border-radius:12px;white-space:nowrap}
+.pill.crit{background:var(--red-soft);color:var(--red)}
+.pill.high{background:var(--amber-soft);color:var(--amber)}
+.pill.med{background:#fbf5dc;color:#8a6d0b}
+.pill.ok{background:var(--green-soft);color:var(--green)}
+.issue .fix{background:var(--soft);border-radius:6px;padding:6px 10px;margin-top:6px;font-size:9.6pt}
+.issue .fix b{color:var(--green)}
+/* swot */
+.swot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.sw{border-radius:12px;padding:12px 14px;break-inside:avoid}
+.sw h3{margin:0 0 6px;font-size:12pt}
+.sw ul{padding-right:18px;margin:0;font-size:9.6pt}
+.sw.s{background:var(--green-soft)} .sw.s h3{color:var(--green)}
+.sw.w{background:var(--red-soft)} .sw.w h3{color:var(--red)}
+.sw.o{background:var(--brand-soft)} .sw.o h3{color:var(--brand)}
+.sw.t{background:var(--amber-soft)} .sw.t h3{color:var(--amber)}
+.chart{border:1px solid var(--line);border-radius:10px;padding:10px;margin:10px 0;break-inside:avoid}
+.chart .cap{font-size:8.8pt;color:var(--muted);margin-top:4px}
+.chart svg{width:100%;height:auto;display:block}
+.pb{break-before:page}
+.toc ol{list-style-type:persian;padding-right:20px;columns:2;column-gap:30px}
+.foot{margin-top:30px;padding-top:10px;border-top:1px solid var(--line);font-size:8.6pt;color:var(--muted)}
+@media (max-width:640px){.kpis{grid-template-columns:1fr 1fr}.swot{grid-template-columns:1fr}.cover .meta{grid-template-columns:1fr}.toc ol{columns:1}}
+@media print{.wrap{max-width:none;padding:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section class="cover">
+  <div>
+    <span class="tag">گزارش ممیزی سئو</span>
+    <h1>نوین پارسیان</h1>
+    <div class="sub">بررسی کامل عملکرد جستجوی ارگانیک، مشکلات فنی، نقاط قوت و تحلیل SWOT</div>
+    <div class="bar"></div>
+  </div>
+  <div class="meta">
+    <div>وب‌سایت: <b class="en" style="background:none">novinparsian.com</b></div>
+    <div>تاریخ گزارش: <b>۱۸ آبان ۱۴۰۵</b> (۹ November ۲۰۲۶)</div>
+    <div>بازه داده: <b>۱۷ مرداد تا ۱۷ آبان ۱۴۰۵</b> (۹۲ روز)</div>
+    <div>منابع: <b>Google Search Console + بررسی مستقیم سایت</b></div>
+  </div>
+</section>
+
+<section class="toc">
+  <h2>فهرست</h2>
+  <ol>
+    <li>خلاصه مدیریتی</li>
+    <li>وضعیت کلی و روند ۳ ماه اخیر</li>
+    <li>تحلیل کلمات کلیدی</li>
+    <li>تحلیل صفحات</li>
+    <li>مشکلات و باگ‌های فنی</li>
+    <li>مشکلات محتوایی و ساختاری</li>
+    <li>نقاط قوت</li>
+    <li>تحلیل SWOT</li>
+    <li>برنامه اقدام اولویت‌بندی‌شده</li>
+    <li>روش کار و محدودیت‌ها</li>
+  </ol>
+</section>
+
+<h2>۱. خلاصه مدیریتی</h2>
+<p>نوین پارسیان یک <b>برند قوی</b> با کاتالوگ بسیار بزرگ دوره (حدود ۸۶۰ صفحه دوره) دارد و در ۳ ماه اخیر <b>۱۸٬۰۱۳ کلیک</b> و <b>۱۷۴٬۱۸۱ نمایش</b> از گوگل گرفته است. اما بخش بزرگی از این ترافیک از <b>جستجوی نام برند</b> می‌آید و سایت در جستجوهای عمومی (مثل «دوره PLC»، «آموزش MSP»، «دوره برق صنعتی») با وجود رتبه‌های نسبتاً خوب، تقریباً کلیک نمی‌گیرد.</p>
+<div class="score">
+  <div class="n">۵۲<small>/۱۰۰</small></div>
+  <div><b>امتیاز کلی سلامت سئو (برآورد تحلیلگر)</b><br><span class="muted">پایه‌ی برند و محتوا خوب است؛ ولی باگ‌های فنی جدی در تگ عنوان، ساختار URL، نقشه سایت، صفحات ۴۰۴ و بلاگ از کار افتاده، بخش زیادی از پتانسیل را هدر می‌دهند.</span></div>
+</div>
+<div class="call red"><b class="t">۵ مشکل مهم که باید همین هفته رفع شوند</b>
+<ul>
+  <li><b>تگ عنوان همه‌ی ~۸۶۰ صفحه دوره خالی و یکسان است:</b> «آموزش  | اقساطی با بیمه یادگیری | مدرک کانادایی» (نام دوره داخل عنوان نیست).</li>
+  <li><b>بلاگ (<code>blog.novinparsian.com</code>) از کار افتاده است:</b> گواهی SSL منقضی شده و نسخه HTTP خطای ۵۰۰ می‌دهد، در حالی که از منوی سایت به آن لینک داده شده.</li>
+  <li><b>نقشه سایت خراب است:</b> از ۱٬۷۶۱ آدرس، ۸۴۸ تا فایل عکس هستند، صفحه اصلی ۱۳ بار تکرار شده و هیچ <code>lastmod</code> ندارد.</li>
+  <li><b>صفحات خطای ۴۰۴ واقعی وجود ندارد (Soft ۴۰۴):</b> هر آدرس اشتباهی کد ۲۰۰ و محتوای صفحه اصلی برمی‌گرداند.</li>
+  <li><b>صفحات سیستمی Moodle ایندکس شده‌اند</b> (<code>/course/index.php</code>، <code>/course/view.php</code>، صفحات جستجو و <code>/local/jobinjob/...</code>) و با صفحات اصلی رقابت می‌کنند.</li>
+</ul></div>
+<div class="call green"><b class="t">بزرگ‌ترین فرصت</b>
+اصلاح تگ عنوان صفحات دوره و بهینه‌سازی چند خوشه کلمه کلیدی (PLC، MSP، برق صنعتی، تاسیسات، نظام مهندسی) به‌تنهایی می‌تواند ماهانه <b>چندصد تا بیش از هزار کلیک غیربرند</b> اضافه کند، چون این صفحات همین الان در صفحه اول گوگل نمایش داده می‌شوند ولی کلیک نمی‌گیرند.</div>
+
+<h2>۲. وضعیت کلی و روند ۳ ماه اخیر</h2>
+<div class="kpis">
+  <div class="kpi"><div class="l">کلیک</div><div class="v">۱۸٬۰۱۳</div><div class="d muted">میانگین ۱۹۶ در روز</div></div>
+  <div class="kpi"><div class="l">نمایش</div><div class="v">۱۷۴٬۱۸۱</div><div class="d muted">میانگین ۱٬۸۹۳ در روز</div></div>
+  <div class="kpi"><div class="l">CTR میانگین</div><div class="v">۱۰.۳%</div><div class="d muted">بالا، به دلیل سهم برند</div></div>
+  <div class="kpi"><div class="l">میانگین جایگاه</div><div class="v">۷.۹</div><div class="d down">رو به افت</div></div>
+</div>
+<div class="chart"><svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg" font-family="Vazirmatn,Tahoma" font-size="11" direction="ltr"><line x1="46" x2="746" y1="190.0" y2="190.0" stroke="#e3e7ec"/><text x="38" y="194.0" text-anchor="end" fill="#5b6675">۰</text><line x1="46" x2="746" y1="132.0" y2="132.0" stroke="#e3e7ec"/><text x="38" y="136.0" text-anchor="end" fill="#5b6675">۱۰۰</text><line x1="46" x2="746" y1="74.0" y2="74.0" stroke="#e3e7ec"/><text x="38" y="78.0" text-anchor="end" fill="#5b6675">۲۰۰</text><line x1="46" x2="746" y1="16.0" y2="16.0" stroke="#e3e7ec"/><text x="38" y="20.0" text-anchor="end" fill="#5b6675">۳۰۰</text><line x1="46.0" x2="46.0" y1="16" y2="190" stroke="#eef1f4"/><text x="46.0" y="210" text-anchor="middle" fill="#5b6675">۱۷ مرداد</text><line x1="161.4" x2="161.4" y1="16" y2="190" stroke="#eef1f4"/><text x="161.4" y="210" text-anchor="middle" fill="#5b6675">۱ شهریور</text><line x1="399.8" x2="399.8" y1="16" y2="190" stroke="#eef1f4"/><text x="399.8" y="210" text-anchor="middle" fill="#5b6675">۱ مهر</text><line x1="630.6" x2="630.6" y1="16" y2="190" stroke="#eef1f4"/><text x="630.6" y="210" text-anchor="middle" fill="#5b6675">۱ آبان</text><line x1="746.0" x2="746.0" y1="16" y2="190" stroke="#eef1f4"/><text x="746.0" y="210" text-anchor="middle" fill="#5b6675">۱۷ آبان</text><rect x="43.3" y="36.3" width="5.3" height="153.7" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="51.0" y="50.2" width="5.3" height="139.8" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="58.7" y="39.8" width="5.3" height="150.2" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="66.4" y="48.5" width="5.3" height="141.5" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="74.1" y="75.7" width="5.3" height="114.3" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="81.8" y="86.8" width="5.3" height="103.2" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="89.5" y="83.9" width="5.3" height="106.1" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="97.2" y="55.4" width="5.3" height="134.6" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="104.9" y="49.1" width="5.3" height="140.9" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="112.6" y="47.9" width="5.3" height="142.1" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="120.3" y="50.8" width="5.3" height="139.2" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="128.0" y="51.4" width="5.3" height="138.6" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="135.6" y="106.5" width="5.3" height="83.5" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="143.3" y="90.2" width="5.3" height="99.8" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="151.0" y="38.6" width="5.3" height="151.4" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="158.7" y="24.7" width="5.3" height="165.3" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="166.4" y="33.4" width="5.3" height="156.6" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="174.1" y="57.2" width="5.3" height="132.8" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="181.8" y="63.6" width="5.3" height="126.4" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="189.5" y="108.2" width="5.3" height="81.8" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="197.2" y="93.7" width="5.3" height="96.3" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="204.9" y="94.9" width="5.3" height="95.1" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="212.6" y="94.9" width="5.3" height="95.1" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="220.3" y="71.1" width="5.3" height="118.9" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="228.0" y="68.8" width="5.3" height="121.2" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="235.6" y="77.5" width="5.3" height="112.5" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="243.3" y="111.1" width="5.3" height="78.9" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="251.0" y="82.7" width="5.3" height="107.3" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="258.7" y="68.2" width="5.3" height="121.8" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="266.4" y="65.3" width="5.3" height="124.7" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="274.1" y="75.2" width="5.3" height="114.8" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="281.8" y="71.7" width="5.3" height="118.3" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="289.5" y="89.1" width="5.3" height="100.9" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="297.2" y="123.3" width="5.3" height="66.7" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="304.9" y="121.6" width="5.3" height="68.4" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="312.6" y="65.9" width="5.3" height="124.1" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="320.3" y="70.5" width="5.3" height="119.5" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="328.0" y="76.3" width="5.3" height="113.7" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="335.6" y="76.3" width="5.3" height="113.7" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="343.3" y="100.7" width="5.3" height="89.3" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="351.0" y="101.3" width="5.3" height="88.7" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="358.7" y="112.3" width="5.3" height="77.7" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="366.4" y="76.9" width="5.3" height="113.1" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="374.1" y="75.7" width="5.3" height="114.3" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="381.8" y="78.1" width="5.3" height="111.9" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="389.5" y="64.7" width="5.3" height="125.3" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="397.2" y="97.2" width="5.3" height="92.8" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="404.9" y="107.6" width="5.3" height="82.4" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="412.6" y="67.6" width="5.3" height="122.4" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="420.3" y="59.5" width="5.3" height="130.5" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="428.0" y="52.5" width="5.3" height="137.5" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="435.6" y="77.5" width="5.3" height="112.5" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="443.3" y="51.4" width="5.3" height="138.6" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="451.0" y="57.2" width="5.3" height="132.8" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="458.7" y="99.5" width="5.3" height="90.5" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="466.4" y="97.8" width="5.3" height="92.2" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="474.1" y="69.9" width="5.3" height="120.1" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="481.8" y="62.4" width="5.3" height="127.6" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="489.5" y="54.3" width="5.3" height="135.7" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="497.2" y="69.9" width="5.3" height="120.1" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="504.9" y="67.6" width="5.3" height="122.4" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="512.6" y="112.9" width="5.3" height="77.1" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="520.3" y="101.3" width="5.3" height="88.7" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="528.0" y="83.3" width="5.3" height="106.7" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="535.6" y="65.9" width="5.3" height="124.1" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="543.3" y="64.7" width="5.3" height="125.3" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="551.0" y="84.4" width="5.3" height="105.6" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="558.7" y="79.2" width="5.3" height="110.8" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="566.4" y="100.7" width="5.3" height="89.3" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="574.1" y="104.2" width="5.3" height="85.8" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="581.8" y="63.6" width="5.3" height="126.4" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="589.5" y="50.2" width="5.3" height="139.8" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="597.2" y="49.6" width="5.3" height="140.4" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="604.9" y="63.6" width="5.3" height="126.4" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="612.6" y="82.1" width="5.3" height="107.9" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="620.3" y="88.5" width="5.3" height="101.5" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="628.0" y="99.5" width="5.3" height="90.5" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="635.6" y="77.5" width="5.3" height="112.5" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="643.3" y="85.0" width="5.3" height="105.0" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="651.0" y="64.7" width="5.3" height="125.3" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="658.7" y="46.7" width="5.3" height="143.3" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="666.4" y="78.6" width="5.3" height="111.4" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="674.1" y="96.0" width="5.3" height="94.0" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="681.8" y="109.4" width="5.3" height="80.6" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="689.5" y="77.5" width="5.3" height="112.5" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="697.2" y="68.2" width="5.3" height="121.8" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="704.9" y="84.4" width="5.3" height="105.6" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="712.6" y="69.4" width="5.3" height="120.6" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="720.3" y="92.6" width="5.3" height="97.4" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="728.0" y="112.3" width="5.3" height="77.7" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="735.6" y="93.1" width="5.3" height="96.9" fill="#0f4c81" opacity="0.28" rx="1"/><rect x="743.3" y="85.6" width="5.3" height="104.4" fill="#0f4c81" opacity="0.28" rx="1"/><polyline fill="none" stroke="#0f4c81" stroke-width="2.4" points="46.0,36.3 53.7,43.3 61.4,42.1 69.1,43.7 76.8,50.1 84.5,56.2 92.2,60.2 99.8,62.9 107.5,62.7 115.2,63.9 122.9,64.2 130.6,60.7 138.3,63.6 146.0,64.5 153.7,62.1 161.4,58.6 169.1,56.5 176.8,57.4 184.5,59.2 192.2,59.4 199.8,59.9 207.5,68.0 215.2,78.0 222.9,83.4 230.6,85.0 238.3,87.0 246.0,87.4 253.7,85.8 261.4,82.0 269.1,77.8 276.8,78.4 284.5,78.8 292.2,80.5 299.8,82.2 307.5,87.8 315.2,87.4 322.9,88.2 330.6,88.3 338.3,89.0 346.0,90.7 353.7,87.5 361.4,86.2 369.1,87.8 376.8,88.5 384.5,88.7 392.2,87.1 399.8,86.6 407.5,87.5 415.2,81.1 422.9,78.6 430.6,75.3 438.3,75.2 446.0,73.3 453.7,67.6 461.4,66.5 469.1,70.8 476.8,72.3 484.5,73.7 492.2,70.4 499.8,73.0 507.5,74.5 515.2,76.4 522.9,76.9 530.6,78.8 538.3,79.3 546.0,80.8 553.7,82.9 561.4,84.5 569.1,82.8 576.8,83.2 584.5,80.4 592.2,78.1 599.8,76.0 607.5,73.0 615.2,73.4 622.9,71.7 630.6,71.0 638.3,73.0 646.0,78.0 653.7,80.1 661.4,77.7 669.1,77.2 676.8,78.3 684.5,79.7 692.2,79.7 699.8,77.3 707.5,80.1 715.2,83.4 722.9,85.4 730.6,87.7 738.3,85.4 746.0,86.5"/></svg><div class="cap">کلیک روزانه (ستون‌ها) و میانگین متحرک ۷ روزه (خط). روند کلی نزولی است.</div></div>
+<div class="chart"><svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg" font-family="Vazirmatn,Tahoma" font-size="11" direction="ltr"><line x1="46" x2="746" y1="16.0" y2="16.0" stroke="#e3e7ec"/><text x="38" y="20.0" text-anchor="end" fill="#5b6675">۶</text><line x1="46" x2="746" y1="50.8" y2="50.8" stroke="#e3e7ec"/><text x="38" y="54.8" text-anchor="end" fill="#5b6675">۷</text><line x1="46" x2="746" y1="85.6" y2="85.6" stroke="#e3e7ec"/><text x="38" y="89.6" text-anchor="end" fill="#5b6675">۸</text><line x1="46" x2="746" y1="120.4" y2="120.4" stroke="#e3e7ec"/><text x="38" y="124.4" text-anchor="end" fill="#5b6675">۹</text><line x1="46" x2="746" y1="155.2" y2="155.2" stroke="#e3e7ec"/><text x="38" y="159.2" text-anchor="end" fill="#5b6675">۱۰</text><line x1="46" x2="746" y1="190.0" y2="190.0" stroke="#e3e7ec"/><text x="38" y="194.0" text-anchor="end" fill="#5b6675">۱۱</text><line x1="46.0" x2="46.0" y1="16" y2="190" stroke="#eef1f4"/><text x="46.0" y="210" text-anchor="middle" fill="#5b6675">۱۷ مرداد</text><line x1="161.4" x2="161.4" y1="16" y2="190" stroke="#eef1f4"/><text x="161.4" y="210" text-anchor="middle" fill="#5b6675">۱ شهریور</text><line x1="399.8" x2="399.8" y1="16" y2="190" stroke="#eef1f4"/><text x="399.8" y="210" text-anchor="middle" fill="#5b6675">۱ مهر</text><line x1="630.6" x2="630.6" y1="16" y2="190" stroke="#eef1f4"/><text x="630.6" y="210" text-anchor="middle" fill="#5b6675">۱ آبان</text><line x1="746.0" x2="746.0" y1="16" y2="190" stroke="#eef1f4"/><text x="746.0" y="210" text-anchor="middle" fill="#5b6675">۱۷ آبان</text><polyline fill="none" stroke="#b42318" stroke-width="1.2" opacity="0.4" points="46.0,82.1 53.7,57.8 61.4,64.7 69.1,68.2 76.8,50.8 84.5,47.3 92.2,54.3 99.8,40.4 107.5,57.8 115.2,57.8 122.9,61.2 130.6,50.8 138.3,68.2 146.0,64.7 153.7,61.2 161.4,50.8 169.1,61.2 176.8,75.2 184.5,68.2 192.2,78.6 199.8,85.6 207.5,75.2 215.2,71.7 222.9,68.2 230.6,75.2 238.3,68.2 246.0,106.5 253.7,71.7 261.4,61.2 269.1,89.1 276.8,61.2 284.5,85.6 292.2,85.6 299.8,89.1 307.5,78.6 315.2,92.6 322.9,43.8 330.6,61.2 338.3,82.1 346.0,99.5 353.7,99.5 361.4,116.9 369.1,82.1 376.8,92.6 384.5,89.1 392.2,99.5 399.8,89.1 407.5,103.0 415.2,99.5 422.9,68.2 430.6,61.2 438.3,85.6 446.0,99.5 453.7,82.1 461.4,71.7 469.1,106.5 476.8,85.6 484.5,75.2 492.2,71.7 499.8,89.1 507.5,75.2 515.2,92.6 522.9,96.0 530.6,82.1 538.3,85.6 546.0,82.1 553.7,82.1 561.4,71.7 569.1,85.6 576.8,89.1 584.5,64.7 592.2,68.2 599.8,43.8 607.5,103.0 615.2,110.0 622.9,78.6 630.6,89.1 638.3,82.1 646.0,85.6 653.7,61.2 661.4,103.0 669.1,99.5 676.8,106.5 684.5,127.4 692.2,113.4 699.8,92.6 707.5,110.0 715.2,148.2 722.9,61.2 730.6,78.6 738.3,165.6 746.0,148.2"/><polyline fill="none" stroke="#b42318" stroke-width="2.6" points="46.0,82.1 53.7,69.9 61.4,68.2 69.1,68.2 76.8,64.7 84.5,61.8 92.2,60.7 99.8,54.8 107.5,54.8 115.2,53.8 122.9,52.8 130.6,52.8 138.3,55.8 146.0,57.3 153.7,60.2 161.4,59.3 169.1,59.7 176.8,61.7 184.5,64.2 192.2,65.7 199.8,68.7 207.5,70.7 215.2,73.7 222.9,74.7 230.6,74.7 238.3,74.7 246.0,78.6 253.7,76.7 261.4,74.7 269.1,77.1 276.8,76.2 284.5,77.6 292.2,80.1 299.8,77.6 307.5,78.6 315.2,83.1 322.9,76.7 330.6,76.7 338.3,76.2 346.0,78.1 353.7,79.6 361.4,85.1 369.1,83.6 376.8,90.6 384.5,94.5 392.2,97.0 399.8,95.5 407.5,96.0 415.2,93.6 422.9,91.6 430.6,87.1 438.3,86.6 446.0,86.6 453.7,85.6 461.4,81.1 469.1,82.1 476.8,84.6 484.5,86.6 492.2,84.6 499.8,83.1 507.5,82.1 515.2,85.1 522.9,83.6 530.6,83.1 538.3,84.6 546.0,86.1 553.7,85.1 561.4,84.6 569.1,83.6 576.8,82.6 584.5,80.1 592.2,77.6 599.8,72.2 607.5,75.2 615.2,80.6 622.9,79.6 630.6,79.6 638.3,82.1 646.0,84.6 653.7,87.1 661.4,87.1 669.1,85.6 676.8,89.6 684.5,95.0 692.2,99.5 699.8,100.5 707.5,107.5 715.2,113.9 722.9,108.5 730.6,104.5 738.3,110.0 746.0,114.9"/></svg><div class="cap">میانگین جایگاه روزانه (هرچه پایین‌تر، بدتر). محور معکوس است؛ خط پررنگ میانگین ۷ روزه است و افت از حدود ۷ به حدود ۹ را نشان می‌دهد.</div></div>
+<table>
+  <tr><th>بازه</th><th class="num">کلیک</th><th class="num">نمایش</th><th class="num">CTR</th><th class="num">جایگاه</th></tr>
+  <tr><td>ماه اول (۱۷ مرداد – ۱۵ شهریور)</td><td class="num">۶٬۳۳۴</td><td class="num">۶۱٬۳۹۲</td><td class="num">۱۰.۳۲%</td><td class="num">۷.۴۳</td></tr>
+  <tr><td>ماه دوم (۱۶ شهریور – ۱۵ مهر)</td><td class="num">۵٬۸۹۴</td><td class="num">۵۵٬۴۰۳</td><td class="num">۱۰.۶۴%</td><td class="num">۷.۹۴</td></tr>
+  <tr><td>ماه سوم (۱۶ مهر – ۱۷ آبان)</td><td class="num">۵٬۷۸۵</td><td class="num">۵۷٬۳۸۶</td><td class="num">۱۰.۰۸%</td><td class="num">۸.۲۴</td></tr>
+  <tr><td>تغییر ماه سوم نسبت به ماه اول</td><td class="num down">-۸.۷%</td><td class="num down">-۶.۵%</td><td class="num">-۰.۲۴pp</td><td class="num down">+۰.۸۱</td></tr>
+</table>
+<div class="call red"><b class="t">هشدار: افت تدریجی رتبه</b>
+میانگین جایگاه از ۷.۲۵ در دو هفته اول به ۸.۶۴ در دو هفته آخر رسیده و در روزهای ۱۶ و ۱۷ آبان به ۱۰.۳ و ۹.۸ رسیده است. یعنی سایت آرام‌آرام در حال سُر خوردن به پایین صفحه اول است و کلیک‌ها ۹٪ کم شده‌اند. اگر روند ادامه پیدا کند، بخشی از کلمات به صفحه دوم گوگل می‌روند.</div>
+<p><b>الگوی هفتگی:</b> پنجشنبه (میانگین ۱۴۸ کلیک) و جمعه (۱۶۱) کمترین ترافیک را دارند و یکشنبه تا سه‌شنبه (حدود ۲۲۰) بیشترین. این برای مخاطب حرفه‌ای و کاری کاملاً طبیعی است و نشان می‌دهد مخاطب سایت عمدتاً مهندسان شاغل و کارفرمایان هستند. کمپین‌ها و انتشار محتوا بهتر است شنبه تا سه‌شنبه انجام شود.</p>
+
+<h2>۳. تحلیل کلمات کلیدی</h2>
+<p>سرچ کنسول ۱٬۰۰۰ کلمه برتر را نشان داده که ۵٬۷۴۲ کلیک (حدود ۳۲٪ کل) را پوشش می‌دهد؛ بقیه‌ی کلیک‌ها از جستجوهای بسیار کم‌حجم (long-tail) می‌آیند که این خودش نشانه‌ی پوشش وسیع کاتالوگ است.</p>
+<h3>۳.۱ تفکیک برند، غیربرند و «ترافیک اشتباهی»</h3>
+<table>
+  <tr><th>نوع جستجو</th><th class="num">کلیک</th><th class="num">نمایش</th><th class="num">CTR</th><th>تفسیر</th></tr>
+  <tr><td>برند واقعی (نوین پارسیان، novinparsian، موسسه/آموزشگاه نوین پارسیان…)</td><td class="num">۳٬۳۷۹</td><td class="num">۹٬۷۶۶</td><td class="num">۳۴.۶%</td><td>عالی؛ برند شناخته‌شده است</td></tr>
+  <tr><td>«آسان پردازش تجارت نوین پارسیان» (شرکتی دیگر)</td><td class="num">۷۳۵</td><td class="num">۹٬۸۸۹</td><td class="num">۷.۴%</td><td>ترافیک بی‌ربط و گمراه‌کننده</td></tr>
+  <tr><td>غیربرند (دوره‌ها و موضوعات تخصصی)</td><td class="num">۱٬۶۲۸</td><td class="num">۳۹٬۶۳۰</td><td class="num">۴.۱%</td><td>ضعیف؛ بزرگ‌ترین شکاف</td></tr>
+</table>
+<div class="call blue"><b class="t">مشکل عجیب: سایت به جای یک شرکت دیگر دیده می‌شود</b>
+نزدیک به <b>۱۰ هزار نمایش</b> از جستجوهایی مثل «شماره تماس شرکت آسان پردازش تجارت نوین پارسیان»، «وام آسان پردازش…»، «پشتیبانی آسان پردازش…» و حتی «… کلاهبرداری» آمده است. این یک شرکت متفاوت است (به نظر می‌رسد در زمینه پرداخت/وام بانکی) و سایت نوین پارسیان برای آن رتبه ۱ گرفته است. صفحه «تماس با ما» به همین دلیل ۱۷٬۶۲۷ نمایش دارد. این کاربران به اشتباه با موسسه تماس می‌گیرند، سریع خارج می‌شوند و ممکن است نام برند را با شکایت‌های آن شرکت پیوند بزنند.</div>
+
+<h3>۳.۲ کلمات برتر</h3>
+<table>
+  <tr><th>کلمه</th><th class="num">کلیک</th><th class="num">نمایش</th><th class="num">CTR</th><th class="num">جایگاه</th></tr>
+  <tr><td>نوین پارسیان</td><td class="num">۲٬۱۸۸</td><td class="num">۲٬۸۱۹</td><td class="num">۷۷.۶%</td><td class="num">۱.۵۶</td></tr>
+  <tr><td>شماره تماس شرکت آسان پردازش تجارت نوین پارسیان</td><td class="num">۲۶۴</td><td class="num">۸۸۴</td><td class="num">۲۹.۹%</td><td class="num">۱.۰۴</td></tr>
+  <tr><td>نوین پارسیان دوره های آموزشی</td><td class="num">۲۲۶</td><td class="num">۲۵۸</td><td class="num">۸۷.۶%</td><td class="num">۱.۰۱</td></tr>
+  <tr><td>موسسه نوین پارسیان</td><td class="num">۱۹۳</td><td class="num">۲۶۸</td><td class="num">۷۲.۰%</td><td class="num">۱.۰۰</td></tr>
+  <tr><td>دوره پایپینگ</td><td class="num">۹۷</td><td class="num">۳۵۴</td><td class="num">۲۷.۴%</td><td class="num">۲.۵۱</td></tr>
+  <tr><td>دوره ابزار دقیق</td><td class="num">۵۹</td><td class="num">۴۸۵</td><td class="num">۱۲.۲%</td><td class="num">۴.۴۸</td></tr>
+  <tr><td>آموزش پایپینگ</td><td class="num">۵۵</td><td class="num">۳۷۷</td><td class="num">۱۴.۶%</td><td class="num">۶.۲۳</td></tr>
+  <tr><td>دوره آنالیز ارتعاشات</td><td class="num">۴۸</td><td class="num">۷۶</td><td class="num">۶۳.۲%</td><td class="num">۱.۴۵</td></tr>
+  <tr><td>دوره برق صنعتی</td><td class="num">۴۷</td><td class="num">۹۴۲</td><td class="num">۵.۰%</td><td class="num">۶.۳۵</td></tr>
+  <tr><td>دوره تجهیزات دوار</td><td class="num">۴۱</td><td class="num">۱۳۶</td><td class="num">۳۰.۱%</td><td class="num">۳.۰۰</td></tr>
+</table>
+
+<h3>۳.۳ عملکرد خوشه‌های موضوعی (غیربرند)</h3>
+<table>
+  <tr><th>خوشه</th><th class="num">تعداد کلمه</th><th class="num">کلیک</th><th class="num">نمایش</th><th class="num">CTR</th><th class="num">جایگاه</th><th class="num">بدون کلیک</th></tr>
+  <tr><td><b>پایپینگ</b> (PDMS، E۳D، PV Elite…)</td><td class="num">۵۳</td><td class="num">۳۴۶</td><td class="num">۴٬۰۸۶</td><td class="num up">۸.۵%</td><td class="num">۶.۶</td><td class="num">۱۵</td></tr>
+  <tr><td>برق صنعتی / تابلو / ETAP</td><td class="num">۷۵</td><td class="num">۱۹۴</td><td class="num">۴٬۵۵۸</td><td class="num">۴.۳%</td><td class="num">۸.۸</td><td class="num">۳۴</td></tr>
+  <tr><td>HVAC / تاسیسات / رویت</td><td class="num">۱۰۸</td><td class="num">۲۷۹</td><td class="num">۶٬۸۳۴</td><td class="num">۴.۱%</td><td class="num">۹.۱</td><td class="num">۶۸</td></tr>
+  <tr><td>نظام مهندسی</td><td class="num">۲۳</td><td class="num">۴۲</td><td class="num">۱٬۴۱۲</td><td class="num">۳.۰%</td><td class="num">۱۰.۲</td><td class="num">۱۴</td></tr>
+  <tr><td><b>PLC / زیمنس / WinCC / TIA</b></td><td class="num">۵۱</td><td class="num">۱۴</td><td class="num">۳٬۵۹۷</td><td class="num down">۰.۴%</td><td class="num">۹.۳</td><td class="num">۴۵</td></tr>
+  <tr><td><b>MSP / کنترل پروژه / پریماورا</b></td><td class="num">۴۲</td><td class="num">۱۳</td><td class="num">۲٬۲۸۵</td><td class="num down">۰.۶%</td><td class="num">۱۵.۵</td><td class="num">۳۲</td></tr>
+  <tr><td>تعمیر کولر/اسپلیت (نامرتبط)</td><td class="num">۲۹</td><td class="num">۳</td><td class="num">۱٬۱۳۱</td><td class="num">۰.۳%</td><td class="num">۱۰.۲</td><td class="num">۲۷</td></tr>
+  <tr><td>اطلاعاتی («… چیست»، «معنی …»)</td><td class="num">۱۸</td><td class="num">۲۱</td><td class="num">۱٬۰۰۳</td><td class="num">۲.۱%</td><td class="num">۸.۶</td><td class="num">۱۲</td></tr>
+</table>
+<div class="call red"><b class="t">خوشه PLC تقریباً صفر کلیک دارد</b>
+«دوره plc s۷-۴۰۰» در جایگاه ۲.۹ با ۱۹۰ نمایش، «دوره plc ۴۰۰» در جایگاه ۲.۶ با ۲۱۰ نمایش و «دوره plc s۷-۳۰۰» در جایگاه ۲.۸ با ۲۱۳ نمایش، <b>هیچ کلیکی نگرفته‌اند</b>. رتبه ۳ و صفر کلیک یعنی نتیجه‌ی نمایش داده‌شده برای کاربر جذاب یا مرتبط نیست. این مستقیماً به باگ عنوان صفحه دوره برمی‌گردد (صفحه «PLC ۱ - S۷ (۳۰۰-۴۰۰» با عنوان عمومی «آموزش | اقساطی…» نمایش داده می‌شود) و همچنین اینکه یک صفحه برای چند مدل PLC هدف‌گذاری شده است.</div>
+
+<h3>۳.۴ فرصت‌های «نزدیک به صفحه اول» (Striking distance)</h3>
+<p>کلماتی که سایت همین الان در جایگاه ۴ تا ۱۵ دارد و حجم قابل توجهی دارند. بهبود عنوان، محتوا و لینک داخلی این صفحات سریع‌ترین بازده را دارد:</p>
+<table>
+  <tr><th>کلمه</th><th class="num">نمایش</th><th class="num">کلیک</th><th class="num">CTR</th><th class="num">جایگاه</th></tr>
+  <tr><td>دوره برق صنعتی</td><td class="num">۹۴۲</td><td class="num">۴۷</td><td class="num">۵.۰%</td><td class="num">۶.۴</td></tr>
+  <tr><td>آموزش نظام مهندسی</td><td class="num">۶۳۵</td><td class="num">۰</td><td class="num">۰%</td><td class="num">۹.۹</td></tr>
+  <tr><td>پایپینگ</td><td class="num">۵۷۶</td><td class="num">۵</td><td class="num">۰.۹%</td><td class="num">۸.۷</td></tr>
+  <tr><td>msp</td><td class="num">۴۸۷</td><td class="num">۰</td><td class="num">۰%</td><td class="num">۱۱.۱</td></tr>
+  <tr><td>آموزش صفر تا صد پایپینگ</td><td class="num">۴۴۹</td><td class="num">۹</td><td class="num">۲.۰%</td><td class="num">۵.۷</td></tr>
+  <tr><td>مهندسی مکانیک</td><td class="num">۴۲۲</td><td class="num">۲</td><td class="num">۰.۵%</td><td class="num">۷.۶</td></tr>
+  <tr><td>آموزش ابزار دقیق</td><td class="num">۳۴۶</td><td class="num">۱۱</td><td class="num">۳.۲%</td><td class="num">۶.۲</td></tr>
+  <tr><td>بازرسی مخازن تحت فشار</td><td class="num">۳۲۶</td><td class="num">۵</td><td class="num">۱.۵%</td><td class="num">۶.۹</td></tr>
+  <tr><td>طراحی فرایند</td><td class="num">۲۶۹</td><td class="num">۳</td><td class="num">۱.۱%</td><td class="num">۷.۰</td></tr>
+  <tr><td>آموزش رویت تاسیسات</td><td class="num">۲۶۶</td><td class="num">۱۳</td><td class="num">۴.۹%</td><td class="num">۷.۴</td></tr>
+  <tr><td>pqr چیست</td><td class="num">۲۵۷</td><td class="num">۵</td><td class="num">۱.۹%</td><td class="num">۵.۳</td></tr>
+  <tr><td>دوره tia portal</td><td class="num">۲۰۳</td><td class="num">۰</td><td class="num">۰%</td><td class="num">۵.۹</td></tr>
+  <tr><td>دوره wincc professional</td><td class="num">۱۸۴</td><td class="num">۰</td><td class="num">۰%</td><td class="num">۶.۵</td></tr>
+</table>
+<p><b>نکته:</b> ۵۶۴ کلمه از ۱٬۰۰۰ کلمه برتر (با مجموع ۱۷٬۹۵۷ نمایش) <b>هیچ کلیکی</b> نگرفته‌اند. همچنین سایت برای ده‌ها جستجوی بی‌ربط مثل «تعمیرات کولر»، «سرویس کولر گازی» و «عکس تعمیرات کولر» نمایش داده می‌شود که نشان می‌دهد سیگنال موضوعی برخی صفحات (احتمالاً صفحات تاسیسات و گالری) مبهم است.</p>
+
+<h2>۴. تحلیل صفحات</h2>
+<p>۸۱۷ آدرس در سرچ کنسول نمایش داشته‌اند. فقط <b>۲۷ صفحه</b> میانگین جایگاه ۱ تا ۳ دارند، ۶۰۶ صفحه در جایگاه ۳ تا ۱۰، ۱۳۹ صفحه در ۱۰ تا ۲۰ و ۴۵ صفحه بالای ۲۰. <b>۲۴۴ صفحه هیچ کلیکی</b> نگرفته‌اند.</p>
+<table>
+  <tr><th>نوع صفحه</th><th class="num">تعداد URL</th><th class="num">کلیک</th><th class="num">نمایش</th><th class="num">CTR</th><th class="num">جایگاه</th></tr>
+  <tr><td>صفحات دوره (<code>single-course</code>)</td><td class="num">۶۴۹</td><td class="num">۱۰٬۳۱۰</td><td class="num">۱۲۳٬۵۶۸</td><td class="num">۸.۳%</td><td class="num">۸.۸</td></tr>
+  <tr><td>صفحه اصلی</td><td class="num">۱</td><td class="num">۴٬۳۹۶</td><td class="num">۱۶٬۲۴۶</td><td class="num">۲۷.۱%</td><td class="num">۵.۷</td></tr>
+  <tr><td>دپارتمان‌ها (<code>department</code>)</td><td class="num">۱۹</td><td class="num">۲٬۳۸۲</td><td class="num">۳۸٬۲۹۷</td><td class="num">۶.۲%</td><td class="num">۶.۳</td></tr>
+  <tr><td>تماس با ما</td><td class="num">۱</td><td class="num">۱٬۰۰۸</td><td class="num">۱۷٬۶۲۷</td><td class="num">۵.۷%</td><td class="num">۳.۸</td></tr>
+  <tr><td>صفحات جستجوی داخلی (<code>/pages/search/</code>)</td><td class="num">۲۰</td><td class="num">۱۷۴</td><td class="num">۶٬۱۸۸</td><td class="num">۲.۸%</td><td class="num">۲.۲</td></tr>
+  <tr><td>صفحات سیستمی Moodle (<code>/course/index.php</code>)</td><td class="num">۴۳</td><td class="num">۱۲۷</td><td class="num">۱۰٬۷۵۷</td><td class="num down">۱.۲%</td><td class="num">۲.۷</td></tr>
+  <tr><td>صفحات <code>/course/view.php</code> (در robots بلاک شده!)</td><td class="num">۳۶</td><td class="num">۵</td><td class="num">۳۰۳</td><td class="num">۱.۷%</td><td class="num">۲۶.۴</td></tr>
+  <tr><td>درباره ما</td><td class="num">۱</td><td class="num">۵۲</td><td class="num">۳٬۴۵۴</td><td class="num down">۱.۵%</td><td class="num">۲.۸</td></tr>
+  <tr><td>اساتید و صفحات استاد</td><td class="num">۱۴</td><td class="num">۱۶۰</td><td class="num">۲٬۹۹۷</td><td class="num">۵.۳%</td><td class="num">—</td></tr>
+  <tr><td>آگهی‌های شغلی (<code>single-job</code>)</td><td class="num">۱۷</td><td class="num">۳۲</td><td class="num">۴۵۱</td><td class="num">۷.۱%</td><td class="num">۹.۲</td></tr>
+</table>
+<h3>صفحات پرنمایش با CTR بسیار پایین</h3>
+<table>
+  <tr><th>صفحه</th><th class="num">نمایش</th><th class="num">CTR</th><th class="num">جایگاه</th><th>علت احتمالی</th></tr>
+  <tr><td>دپارتمان ۲۱</td><td class="num">۶٬۲۷۳</td><td class="num">۴.۵%</td><td class="num">۷.۸</td><td>عنوان تکراری و قالبی</td></tr>
+  <tr><td>دپارتمان ۱۱ (تاسیسات و تهویه)</td><td class="num">۵٬۶۴۵</td><td class="num">۴.۳%</td><td class="num">۷.۵</td><td>نمایش برای «تعمیر کولر» و جستجوهای بی‌ربط</td></tr>
+  <tr><td>جستجوی داخلی <code>/pages/search/</code></td><td class="num">۵٬۳۹۵</td><td class="num">۲.۷%</td><td class="num">۱.۴</td><td>صفحه بدون H۱ و بدون محتوا که نباید ایندکس شود</td></tr>
+  <tr><td>دپارتمان ۳۳ (نظام مهندسی)</td><td class="num">۳٬۸۱۶</td><td class="num">۱.۶%</td><td class="num">۳.۷</td><td>canonical خالی، محتوای کم (۷۴۴ کلمه)</td></tr>
+  <tr><td>دوره ۲۱۱ (PLC S۷-۳۰۰/۴۰۰)</td><td class="num">۳٬۷۱۸</td><td class="num">۱.۱%</td><td class="num">۹.۲</td><td>عنوان خالی؛ یک صفحه برای چند نیت جستجو</td></tr>
+  <tr><td>درباره ما</td><td class="num">۳٬۴۵۴</td><td class="num">۱.۵%</td><td class="num">۲.۸</td><td>نمایش برای «آسان پردازش…»؛ ۳۲ تصویر از ۳۹ بدون alt</td></tr>
+  <tr><td>دوره ۱۹۰ (MSP)</td><td class="num">۲٬۹۱۹</td><td class="num">۱.۵%</td><td class="num">۱۳.۰</td><td>عنوان خالی، رتبه صفحه دوم</td></tr>
+  <tr><td><code>course/index.php?categoryid=42</code></td><td class="num">۲٬۲۷۶</td><td class="num">۰.۴%</td><td class="num">۱.۲</td><td>صفحه سیستمی Moodle با عنوان «همهٔ درس‌ها»</td></tr>
+</table>
+
+<h2 class="pb">۵. مشکلات و باگ‌های فنی</h2>
+<p class="muted">شدت: <span class="pill crit">بحرانی</span> <span class="pill high">زیاد</span> <span class="pill med">متوسط</span></p>
+
+<div class="issue crit"><div class="hd"><b>۱. تگ عنوان (title) تمام صفحات دوره خالی و یکسان است</b><span class="pill crit">بحرانی</span></div>
+<p>همه‌ی صفحات دوره که بررسی شد (۲۰۱، ۲۱۱، ۱۰۵۰، ۵۱۷، ۸۲۲، ۱۵۶، ۱۹۰، ۶۲۶) دقیقاً یک عنوان دارند: <code>آموزش  | اقساطی با بیمه یادگیری | مدرک کانادایی</code>. متغیر نام دوره بعد از «آموزش» جایگذاری نمی‌شود. یعنی حدود ۸۶۰ صفحه، که منبع ۵۷٪ کلیک‌های سایت هستند، عنوان تکراری دارند. گوگل مجبور است عنوان را خودش بازنویسی کند، و این دلیل اصلی CTR پایین صفحات دوره و صفر کلیک خوشه‌های PLC و MSP است.</p>
+<div class="fix"><b>راه حل:</b> در قالب <code>single-course</code> متغیر fullname را داخل title بگذارید. الگوی پیشنهادی: «دوره [نام دوره] | آنلاین و حضوری با مدرک بین‌المللی | نوین پارسیان» (حداکثر ۶۰ کاراکتر، نام دوره اول بیاید).</div></div>
+
+<div class="issue crit"><div class="hd"><b>۲. بلاگ از دسترس خارج است</b><span class="pill crit">بحرانی</span></div>
+<p>لینک «مقالات» در منو و صفحه اصلی به <code>blog.novinparsian.com</code> می‌رود. گواهی SSL این ساب‌دامین <b>منقضی شده</b> و نسخه HTTP آن <b>خطای ۵۰۰</b> می‌دهد. همچنین <code>novinparsian.com/blog/</code> به صفحه ورود (login) ریدایرکت می‌شود. نتیجه: سایت عملاً هیچ محتوای آموزشی/مقاله‌ای قابل ایندکس ندارد، و کاربران و ربات گوگل با هشدار امنیتی مرورگر روبه‌رو می‌شوند.</p>
+<div class="fix"><b>راه حل:</b> فوراً گواهی SSL را تمدید کنید (مثلاً Let's Encrypt با تمدید خودکار) و خطای سرور را رفع کنید. در بلندمدت بلاگ را به زیرپوشه <code>novinparsian.com/blog/</code> منتقل کنید تا اعتبار دامنه اصلی را تقویت کند.</div></div>
+
+<div class="issue crit"><div class="hd"><b>۳. نقشه سایت (sitemap.xml) پر از خطاست</b><span class="pill crit">بحرانی</span></div>
+<ul>
+  <li>از ۱٬۷۶۱ آدرس، <b>۸۴۸ آدرس فایل تصویر</b> هستند (<code>//pluginfile.php/.../overviewfiles/xxx.jpg</code>) که به‌عنوان صفحه ثبت شده‌اند، آن هم با دو اسلش.</li>
+  <li>صفحه اصلی <b>۱۳ بار</b> تکرار شده و در کل ۵۶ آدرس تکراری وجود دارد.</li>
+  <li>آدرس ناقص <code>/pages/department/?id=</code> (بدون شناسه) دو بار وجود دارد.</li>
+  <li>هیچ <code>lastmod</code> ندارد، پس گوگل نمی‌فهمد کدام دوره به‌روز شده است.</li>
+  <li>آدرس‌های صفحات ثابت بدون «/» آخر هستند (<code>/pages/contact-us</code>) و به نسخه با «/» ریدایرکت ۳۰۱ می‌شوند. نقشه سایت نباید آدرس ریدایرکت‌شونده داشته باشد.</li>
+  <li><code>schemaLocation</code> به نسخه قدیمی ۰.۸۴ اشاره می‌کند.</li>
+</ul>
+<div class="fix"><b>راه حل:</b> نقشه سایت را بازسازی کنید و فقط URLهای canonical با کد ۲۰۰ را نگه دارید. تصاویر را در قالب <code>&lt;image:image&gt;</code> زیر هر صفحه دوره قرار دهید و <code>lastmod</code> واقعی اضافه کنید. بهتر است sitemap را به چند فایل (دوره‌ها، دپارتمان‌ها، اساتید، صفحات) تقسیم کنید.</div></div>
+
+<div class="issue crit"><div class="hd"><b>۴. Soft ۴۰۴: هیچ صفحه‌ای خطای ۴۰۴ نمی‌دهد</b><span class="pill crit">بحرانی</span></div>
+<p>آدرس <code>/this-page-does-not-exist</code> کد <b>۲۰۰</b> و محتوای کامل صفحه اصلی را برمی‌گرداند. <code>/pages/single-course/?id=999999</code> هم کد ۲۰۰ با عنوان «دوره آموزشی» می‌دهد. همین برای <code>/pages/single-job/?id</code> صدق می‌کند که در گوگل ایندکس شده است. این باعث ایندکس شدن تعداد نامحدودی صفحه‌ی تکراری و هدر رفتن بودجه خزش (crawl budget) می‌شود.</p>
+<div class="fix"><b>راه حل:</b> برای آدرس‌های ناموجود و شناسه‌های نامعتبر کد ۴۰۴ (یا برای دوره‌های حذف‌شده ۴۱۰، یا ۳۰۱ به دپارتمان مرتبط) برگردانید.</div></div>
+
+<div class="issue high"><div class="hd"><b>۵. صفحات سیستمی Moodle ایندکس شده‌اند (محتوای تکراری)</b><span class="pill high">زیاد</span></div>
+<p>سایت روی Moodle ساخته شده و صفحات پیش‌فرض آن در کنار صفحات طراحی‌شده ایندکس شده‌اند:</p>
+<ul>
+  <li><code>/course/index.php?categoryid=...</code>: ۴۳ آدرس با ۱۰٬۷۵۷ نمایش و CTR ۱.۲٪ (با صفحات دپارتمان رقابت می‌کنند). عنوان: «نوین پارسیان: همهٔ درس‌ها»، بدون description، بدون canonical، بدون H۱.</li>
+  <li><code>/course/view.php?id=...</code>: ۳۶ آدرس ایندکس شده، در حالی که در robots.txt بلاک شده‌اند. چون گوگل نمی‌تواند آن‌ها را بخزد، ریدایرکت آن‌ها را هم نمی‌بیند و به‌صورت «Indexed, though blocked by robots.txt» باقی می‌مانند.</li>
+  <li>۲۰ آدرس جستجوی داخلی (<code>/pages/search/?category=..</code>)، <code>/local/exportpdf/getPdf.php</code> و صفحات داخلی <code>/local/jobinjob/src/route/...</code>.</li>
+</ul>
+<div class="fix"><b>راه حل:</b> روی <code>course/index.php</code> و صفحات جستجو تگ <code>noindex, follow</code> بگذارید یا آن‌ها را با ۳۰۱ به دپارتمان معادل ببرید. <code>course/view.php</code> را از robots.txt خارج کنید تا گوگل ریدایرکت ۳۰۱ را ببیند، و بعد از پاک شدن از ایندکس دوباره بلاکش کنید. مسیر <code>/local/</code> را بلاک کنید.</div></div>
+
+<div class="issue high"><div class="hd"><b>۶. canonical اشتباه یا خالی</b><span class="pill high">زیاد</span></div>
+<ul>
+  <li>صفحات ثابت canonical را بدون «/» آخر اعلام می‌کنند (<code>/pages/contact-us</code>)، اما آن آدرس به نسخه با «/» ریدایرکت می‌شود. canonical به آدرس ریدایرکت‌شونده اشاره می‌کند و سیگنال‌ها متناقض‌اند.</li>
+  <li>دپارتمان نظام مهندسی (<code>department/?id=33</code>) تگ canonical <b>خالی</b> دارد (<code>href=""</code>).</li>
+  <li>آگهی شغلی canonical به <code>single-job/?id=</code> (بدون شناسه) دارد.</li>
+</ul>
+<div class="fix"><b>راه حل:</b> یک قاعده واحد انتخاب کنید (پیشنهاد: با «/» آخر) و canonical، لینک‌های داخلی و sitemap همه از آن پیروی کنند.</div></div>
+
+<div class="issue high"><div class="hd"><b>۷. H۱ تکراری و نشت کد قالب ({{courseResult.fullname}})</b><span class="pill high">زیاد</span></div>
+<p>هر صفحه دوره دو H۱ دارد: یکی نام دوره و دیگری متن خام <code>{{courseResult.fullname}}</code> که یک متغیر رندرنشده‌ی JavaScript است. گوگل این متن خام را در HTML اولیه می‌بیند. صفحات جستجو، استاد و آگهی شغلی هم اصلاً H۱ ندارند.</p>
+<div class="fix"><b>راه حل:</b> H۱ دوم را به عنصر غیر عنوانی تبدیل کنید یا فقط بعد از رندر نمایش دهید (v-cloak). هر صفحه فقط یک H۱ داشته باشد.</div></div>
+
+<div class="issue high"><div class="hd"><b>۸. ساختار URL غیرخوانا و مبتنی بر پارامتر</b><span class="pill high">زیاد</span></div>
+<p>همه‌ی صفحات مهم آدرسی مثل <code>/pages/single-course/?id=201</code> دارند. این آدرس‌ها هیچ کلمه کلیدی ندارند، در نتایج جستجو و اشتراک‌گذاری جذاب نیستند و با پارامترهای دیگر به‌راحتی نسخه تکراری می‌سازند.</p>
+<div class="fix"><b>راه حل (میان‌مدت):</b> آدرس‌های خوانا مثل <code>/course/hvac-design-1/</code> و <code>/department/piping/</code> بسازید و همه‌ی آدرس‌های قدیمی را با ۳۰۱ یک‌به‌یک منتقل کنید. این کار باید با دقت و نقشه ریدایرکت کامل انجام شود.</div></div>
+
+<div class="issue high"><div class="hd"><b>۹. سرعت سرور و کش</b><span class="pill high">زیاد</span></div>
+<ul>
+  <li>زمان پاسخ اولیه سرور (TTFB) بین ۱.۶ تا ۴ ثانیه اندازه‌گیری شد (صفحه اصلی ۴.۱ ثانیه، دپارتمان پایپینگ ۳.۶ ثانیه). مقدار مطلوب زیر ۰.۸ ثانیه است.</li>
+  <li>هدر <code>cache-control: no-store, no-cache</code> روی همه صفحات عمومی؛ یعنی هیچ صفحه‌ای کش نمی‌شود و هر بازدید سرور Moodle را درگیر می‌کند.</li>
+  <li>کتابخانه‌های قدیمی و سنگین: jQuery ۱.۱۱ (۲۰۱۴) + jQuery Migrate، YUI ۳.۱۷، RequireJS، Babel Polyfill و Slick روی همه صفحات. HTML صفحه اصلی ۱۱۶KB و صفحه دوره حدود ۱۳۰KB است.</li>
+</ul>
+<div class="fix"><b>راه حل:</b> برای صفحات عمومی (کاربران وارد نشده) کش صفحه کامل (Nginx/Varnish یا CDN مثل ArvanCloud) فعال کنید، Moodle را با OPcache و Redis تنظیم کنید و اسکریپت‌های غیرضروری را حذف یا defer کنید. Core Web Vitals را در PageSpeed Insights بررسی کنید.</div></div>
+
+<div class="issue med"><div class="hd"><b>۱۰. ریدایرکت‌های ۳۰۳ به جای ۳۰۱</b><span class="pill med">متوسط</span></div>
+<p><code>www.novinparsian.com</code> و <code>/course/view.php?id=..</code> با کد <b>۳۰۳</b> (ریدایرکت موقت) منتقل می‌شوند. ریدایرکت دائمی باید ۳۰۱ باشد تا اعتبار لینک کامل منتقل شود.</p></div>
+
+<div class="issue med"><div class="hd"><b>۱۱. داده ساختاریافته (Schema) ناقص</b><span class="pill med">متوسط</span></div>
+<ul>
+  <li>اسکیمای <code>Course</code> فقط name، description و provider دارد. برای نمایش «Course info» در گوگل فیلدهای <code>offers</code> (قیمت)، <code>hasCourseInstance</code> (courseMode آنلاین/حضوری، تاریخ شروع، مدرس) لازم است. نام دوره هم فاصله‌های اضافه دارد.</li>
+  <li>صفحه اصلی هیچ اسکیمای <code>EducationalOrganization</code>/<code>Organization</code> با لوگو، آدرس، تلفن و شبکه‌های اجتماعی ندارد که برای پنل دانش برند و رفع اشتباه با «آسان پردازش» مهم است.</li>
+  <li>اسکیمای <code>FAQPage</code>، <code>Person</code> (برای اساتید) و <code>Review/AggregateRating</code> (برای نظرات دانش‌آموختگان) وجود ندارد.</li>
+</ul></div>
+
+<div class="issue med"><div class="hd"><b>۱۲. مشکلات جزئی ولی قابل اصلاح</b><span class="pill med">متوسط</span></div>
+<ul>
+  <li>ابعاد <code>og:image</code> در صفحات دوره جابه‌جاست (width=۶۰۰، height=۱۲۰۰) و تصویر صفحه اصلی فقط ۳۰۰×۱۵۰ است؛ پیش‌نمایش در تلگرام/واتساپ/لینکدین بد نمایش داده می‌شود.</li>
+  <li>صفحه «درباره ما»: ۳۲ تصویر از ۳۹ تصویر متن alt ندارند.</li>
+  <li>توضیحات متا (description) صفحات دپارتمان کلمه تکراری دارد: «دوره‌ آموزش آموزش پایپینگ Piping | اقساطی با بیمه یادگیری | نوین پارسیان» (کل عنوان داخل توضیحات کپی شده).</li>
+  <li>robots.txt آدرس ایمیل شخصی دارد؛ بهتر است حذف شود.</li>
+  <li>هر صفحه کوکی جلسه Moodle (<code>MoodleSession</code>) برای بازدیدکننده ناشناس و ربات می‌سازد که کش را غیرممکن می‌کند.</li>
+</ul></div>
+
+<h2>۶. مشکلات محتوایی و ساختاری</h2>
+<div class="issue high"><div class="hd"><b>وابستگی شدید به برند و ضعف در جستجوهای عمومی</b><span class="pill high">زیاد</span></div>
+<p>CTR جستجوهای غیربرند فقط ۴.۱٪ است، در حالی که این جستجوها چهار برابر جستجوهای برند نمایش دارند. سایت برای «دوره X» دیده می‌شود، ولی صفحات فهرستی/دپارتمان کم‌محتوا و قالبی هستند و برای کلمات عمومی مثل «پایپینگ»، «مهندسی مکانیک»، «برق قدرت» یا «msp» صفحه‌ی مقصد مناسبی وجود ندارد.</p></div>
+<div class="issue high"><div class="hd"><b>نبود محتوای آموزشی/اطلاعاتی</b><span class="pill high">زیاد</span></div>
+<p>جستجوهایی مثل «pqr چیست»، «معنی inventor»، «طراحی فرایند چیست»، «wps و pqr چیست»، «pms در پایپینگ چیست» و «توپک رانی در خطوط لوله» نمایش دارند ولی صفحه پاسخ‌دهنده ندارند (بلاگ از کار افتاده). این همان محتوایی است که اعتبار موضوعی (topical authority) و E-E-A-T می‌سازد و کاربر را به ثبت‌نام دوره می‌رساند.</p></div>
+<div class="issue med"><div class="hd"><b>هم‌پوشانی و کنیبالیزیشن</b><span class="pill med">متوسط</span></div>
+<p>برای یک موضوع چند صفحه رقابت می‌کنند: صفحه دپارتمان، <code>course/index.php</code> همان دسته، صفحه جستجوی همان دسته و چند صفحه دوره (مثلاً «PLC ۱» با «S۷-۳۰۰» و «S۷-۴۰۰» در یک صفحه، و دوره‌های حضوری/آنلاین جداگانه با محتوای مشابه). نتیجه: گوگل نمی‌داند کدام را رتبه دهد و رتبه بین آن‌ها پخش می‌شود.</p></div>
+<div class="issue med"><div class="hd"><b>پیام بازاریابی تکراری در همه‌جا</b><span class="pill med">متوسط</span></div>
+<p>تقریباً همه‌ی عنوان‌ها و توضیحات با «مدرک بین‌المللی از کانادا، بیمه تضمین یادگیری، ۲۵ سال سابقه، پرداخت اقساطی» شروع می‌شوند. این متن قالبی برای گوگل سیگنال «محتوای تکراری» است و برای کاربر هم تفاوت دوره‌ها را نشان نمی‌دهد. اطلاعات متمایز (مدت دوره، سرفصل، نرم‌افزار، سطح، مدرس، تاریخ شروع) باید در توضیحات بیاید.</p></div>
+<div class="issue med"><div class="hd"><b>دوره‌ها و صفحات کم‌بازده</b><span class="pill med">متوسط</span></div>
+<p>حدود ۸۶۰ دوره در نقشه سایت هست ولی فقط ۶۴۹ دوره در ۳ ماه نمایش گرفته‌اند. بخشی احتمالاً دوره‌های قدیمی، برگزارشده یا تکراری هستند. صفحات منقضی‌شده بدون تاریخ و وضعیت مشخص، کیفیت کلی سایت را از نگاه گوگل پایین می‌آورند.</p></div>
+
+<h2 class="pb">۷. نقاط قوت</h2>
+<div class="issue" style="border-right-color:var(--green)">
+<ul>
+  <li><b>برند قدرتمند و شناخته‌شده:</b> «نوین پارسیان» با ۲٬۱۸۸ کلیک، CTR ۷۷.۶٪ و جایگاه ۱.۵۶. ده‌ها شکل مختلف نام برند (فارسی، انگلیسی، با پیشوند موسسه/آموزشگاه/مجتمع فنی) همگی جایگاه ۱ دارند.</li>
+  <li><b>CTR کلی بالا (۱۰.۳٪):</b> بسیار بالاتر از میانگین معمول وب‌سایت‌های آموزشی.</li>
+  <li><b>کاتالوگ عظیم و تخصصی:</b> حدود ۸۶۰ دوره در حوزه‌های نیچ مهندسی (پایپینگ، HVAC، ابزار دقیق، تجهیزات دوار، بازرسی جوش، PV Elite، E۳D، HTRI و…) که رقبای عمومی کمتر پوشش می‌دهند. ۶۸٪ کلیک‌ها از جستجوهای long-tail است.</li>
+  <li><b>جایگاه اول در چند کلمه تجاری ارزشمند:</b> «دوره پایپینگ» (۲.۵)، «دوره آنالیز ارتعاشات» (۱.۴۵)، «دوره تجهیزات دوار» (۳)، «آموزش PV Elite» (۴.۱)، «آموزش E۳D» (۴.۱)، «دوره PDMS» (۴.۹).</li>
+  <li><b>صفحات دوره محتوای غنی دارند:</b> ۲٬۶۰۰ تا ۲٬۹۰۰ کلمه در هر صفحه، رندر سمت سرور (نام دوره در HTML اولیه دیده می‌شود)، H۱ اختصاصی و توضیحات متای اختصاصی شامل نام دوره.</li>
+  <li><b>پایه فنی درست:</b> HTTPS، ریدایرکت ۳۰۱ از HTTP، <code>lang="fa" dir="rtl"</code>، تگ viewport موبایل، canonical روی اکثر صفحات، اسکیمای Breadcrumb و Course، فشرده‌سازی gzip (۱۱۶KB به ۲۳KB)، Google Tag Manager.</li>
+  <li><b>صفحه اصلی بهینه:</b> عنوان و توضیحات قوی، H۱ مشخص، ۱۲ بخش H۲، همه‌ی ۴۷ تصویر alt دارند و lazy-load فعال است.</li>
+  <li><b>سیگنال‌های E-E-A-T:</b> صفحات اساتید و مدیرعامل (جستجوی «علیرضا قندچی»، «پیمان ابراهیمی»، «مهندس عسگری» نمایش دارد)، ۲۵ سال سابقه، مجوز وزارت علوم، نظرات دانش‌آموختگان و لوگوی شرکت‌های مشتری.</li>
+  <li><b>پیشنهاد ارزش متمایز:</b> مدرک کانادایی، بیمه تضمین یادگیری و پرداخت اقساطی؛ مزیت رقابتی واقعی که اگر درست در عنوان‌ها استفاده شود CTR را بالا می‌برد.</li>
+  <li><b>بخش‌های مکمل:</b> آگهی‌های استخدام، مشاوره شغلی، آموزش سازمانی؛ این‌ها مسیرهای ورود جدید (مثل «استخدام پایپینگ») می‌سازند.</li>
+</ul></div>
+
+<h2>۸. تحلیل SWOT</h2>
+<div class="swot">
+  <div class="sw s"><h3>نقاط قوت (Strengths)</h3><ul>
+    <li>برند قوی با جایگاه ۱ و CTR بالای ۷۰٪</li>
+    <li>کاتالوگ بزرگ و تخصصی (~۸۶۰ دوره) در حوزه‌های نیچ مهندسی</li>
+    <li>رتبه‌های خوب در پایپینگ، تجهیزات دوار، آنالیز ارتعاشات و نرم‌افزارهای طراحی</li>
+    <li>صفحات دوره پرمحتوا و رندر سمت سرور</li>
+    <li>۲۵ سال سابقه، مجوز رسمی، اساتید شناخته‌شده (E-E-A-T)</li>
+    <li>USP متمایز: مدرک کانادایی، اقساط، بیمه یادگیری</li>
+  </ul></div>
+  <div class="sw w"><h3>نقاط ضعف (Weaknesses)</h3><ul>
+    <li>عنوان خالی و یکسان در همه صفحات دوره</li>
+    <li>بلاگ از کار افتاده (SSL منقضی، خطای ۵۰۰)</li>
+    <li>نقشه سایت خراب، Soft ۴۰۴ و ایندکس صفحات سیستمی Moodle</li>
+    <li>URLهای پارامتری، canonical ناهماهنگ، H۱ دوتایی</li>
+    <li>TTFB بالا (تا ۴ ثانیه) و عدم کش</li>
+    <li>CTR غیربرند فقط ۴.۱٪؛ خوشه PLC و MSP نزدیک صفر</li>
+    <li>متن‌های قالبی و تکراری</li>
+  </ul></div>
+  <div class="sw o"><h3>فرصت‌ها (Opportunities)</h3><ul>
+    <li>اصلاح title: رشد سریع کلیک بدون تولید محتوای جدید</li>
+    <li>~۴۰ هزار نمایش غیربرند در صفحه اول که کلیک نمی‌گیرند</li>
+    <li>ساخت صفحات هاب برای PLC، MSP، برق صنعتی، نظام مهندسی</li>
+    <li>احیای بلاگ برای جستجوهای «… چیست» و ساخت اعتبار موضوعی</li>
+    <li>اسکیمای کامل Course برای نمایش ویژه در گوگل</li>
+    <li>استفاده از ترافیک برند اشتباهی با یک باکس توضیحی</li>
+    <li>دیده شدن در پاسخ‌های هوش مصنوعی (AI Overviews / ChatGPT) با محتوای ساختاریافته</li>
+  </ul></div>
+  <div class="sw t"><h3>تهدیدها (Threats)</h3><ul>
+    <li>افت مداوم میانگین جایگاه (۷.۲۵ به ۸.۶۴) و کاهش ۹٪ کلیک</li>
+    <li>اختلاط برند با «آسان پردازش تجارت نوین پارسیان» و جستجوهای «کلاهبرداری»</li>
+    <li>رقبای تخصصی (مجتمع فنی تهران، نماتک، فلات قاره و…) در همان کلمات</li>
+    <li>هشدار امنیتی SSL بلاگ: آسیب به اعتماد کاربر و برند</li>
+    <li>به‌روزرسانی‌های کیفیت گوگل که محتوای قالبی و صفحات کم‌ارزش را جریمه می‌کنند</li>
+    <li>کاهش کلیک ارگانیک به دلیل پاسخ‌های AI در صفحه نتایج</li>
+  </ul></div>
+</div>
+
+<h2 class="pb">۹. برنامه اقدام اولویت‌بندی‌شده</h2>
+<h3>فاز ۱: فوری (هفته ۱ تا ۲)</h3>
+<table>
+  <tr><th>اقدام</th><th>اثر</th><th>سختی</th></tr>
+  <tr><td>اصلاح تگ title صفحات دوره با نام دوره</td><td><span class="pill crit">خیلی زیاد</span></td><td>کم</td></tr>
+  <tr><td>تمدید SSL بلاگ و رفع خطای ۵۰۰</td><td><span class="pill crit">خیلی زیاد</span></td><td>کم</td></tr>
+  <tr><td>حذف H۱ دوم و متن <code>{{courseResult.fullname}}</code></td><td><span class="pill high">زیاد</span></td><td>کم</td></tr>
+  <tr><td>بازسازی sitemap (حذف تصاویر، تکراری‌ها، افزودن lastmod)</td><td><span class="pill high">زیاد</span></td><td>کم</td></tr>
+  <tr><td>تبدیل ریدایرکت‌های ۳۰۳ به ۳۰۱</td><td><span class="pill med">متوسط</span></td><td>کم</td></tr>
+  <tr><td>رفع canonical خالی دپارتمان ۳۳ و یکسان‌سازی «/» آخر</td><td><span class="pill high">زیاد</span></td><td>کم</td></tr>
+  <tr><td>افزودن باکس «ما با شرکت آسان پردازش تجارت نوین پارسیان ارتباطی نداریم» در صفحه تماس و درباره ما</td><td><span class="pill med">متوسط</span></td><td>کم</td></tr>
+</table>
+<h3>فاز ۲: کوتاه‌مدت (هفته ۳ تا ۸)</h3>
+<table>
+  <tr><th>اقدام</th><th>اثر</th><th>سختی</th></tr>
+  <tr><td>برگرداندن ۴۰۴/۴۱۰ واقعی برای آدرس‌ها و شناسه‌های ناموجود</td><td><span class="pill high">زیاد</span></td><td>متوسط</td></tr>
+  <tr><td>noindex برای <code>course/index.php</code>، جستجو، <code>/local/</code> و getPdf؛ آزاد کردن موقت <code>course/view.php</code> در robots</td><td><span class="pill high">زیاد</span></td><td>کم</td></tr>
+  <tr><td>کش صفحات عمومی، CDN، کاهش TTFB به زیر ۰.۸ ثانیه</td><td><span class="pill high">زیاد</span></td><td>متوسط</td></tr>
+  <tr><td>اسکیمای کامل Course (offers، hasCourseInstance) + EducationalOrganization + FAQ</td><td><span class="pill med">متوسط</span></td><td>متوسط</td></tr>
+  <tr><td>بازنویسی title و description دپارتمان‌ها با محتوای اختصاصی (حداقل ۱٬۰۰۰ کلمه، FAQ، مقایسه دوره‌ها)</td><td><span class="pill high">زیاد</span></td><td>متوسط</td></tr>
+  <tr><td>ساخت صفحه‌های اختصاصی برای PLC S۷-۳۰۰، S۷-۴۰۰، S۷-۱۲۰۰، TIA Portal، WinCC و MSP</td><td><span class="pill high">زیاد</span></td><td>متوسط</td></tr>
+</table>
+<h3>فاز ۳: میان‌مدت (ماه ۳ تا ۶)</h3>
+<table>
+  <tr><th>اقدام</th><th>اثر</th><th>سختی</th></tr>
+  <tr><td>مهاجرت به URLهای خوانا با نقشه ریدایرکت ۳۰۱ کامل</td><td><span class="pill high">زیاد</span></td><td>زیاد</td></tr>
+  <tr><td>انتقال بلاگ به <code>/blog/</code> و تقویم محتوا: «… چیست»، راهنمای شغلی، مقایسه نرم‌افزارها (حداقل ۸ مقاله در ماه)</td><td><span class="pill high">زیاد</span></td><td>متوسط</td></tr>
+  <tr><td>لینک‌سازی داخلی: مقاله → دوره → دپارتمان؛ دوره‌های مرتبط</td><td><span class="pill med">متوسط</span></td><td>متوسط</td></tr>
+  <tr><td>بازبینی دوره‌های قدیمی: ادغام، ۳۰۱ یا به‌روزرسانی</td><td><span class="pill med">متوسط</span></td><td>متوسط</td></tr>
+  <tr><td>تقویت صفحات اساتید با اسکیمای Person، سوابق و لینک لینکدین</td><td><span class="pill med">متوسط</span></td><td>کم</td></tr>
+  <tr><td>Google Business Profile، لینک‌سازی از انجمن‌ها، شرکت‌های همکار و رسانه‌های صنعتی</td><td><span class="pill med">متوسط</span></td><td>متوسط</td></tr>
+</table>
+<h3>شاخص‌های پیگیری (KPI)</h3>
+<ul>
+  <li>کلیک غیربرند ماهانه (هدف: دو برابر شدن در ۶ ماه)</li>
+  <li>CTR صفحات دوره (هدف: از ۸.۳٪ به بالای ۱۲٪)</li>
+  <li>میانگین جایگاه کل (هدف: برگشت به زیر ۷)</li>
+  <li>تعداد صفحات «Indexed» در برابر «Excluded» در گزارش Pages سرچ کنسول</li>
+  <li>Core Web Vitals (LCP زیر ۲.۵ ثانیه، INP زیر ۲۰۰ms) و TTFB</li>
+  <li>تعداد کلمات خوشه PLC/MSP با حداقل یک کلیک</li>
+</ul>
+
+<h2>۱۰. روش کار و محدودیت‌ها</h2>
+<ul>
+  <li>داده‌ها از خروجی Search Console (جستجوی وب، ۳ ماه اخیر، ۸ اوت تا ۷ نوامبر ۲۰۲۶) استخراج شده‌اند: نمودار روزانه، ۱٬۰۰۰ کلمه برتر، ۸۱۷ صفحه و گزارش Search appearance (Product snippets: ۴۲ کلیک، ۲۷۲ نمایش).</li>
+  <li>بررسی فنی در ۹ نوامبر ۲۰۲۶ با درخواست مستقیم به سایت انجام شد: robots.txt، sitemap.xml، هدرهای HTTP، کدهای وضعیت، تگ‌های head، داده ساختاریافته و ساختار عنوان‌ها در صفحه اصلی، دپارتمان‌ها، دوره‌ها، صفحات ثابت و صفحات سیستمی.</li>
+  <li>سرچ کنسول فقط ۱٬۰۰۰ کلمه برتر را نشان می‌دهد (۳۲٪ کلیک‌ها)؛ تفکیک برند/غیربرند بر اساس همین بخش است.</li>
+  <li>داده‌های Core Web Vitals میدانی، بک‌لینک‌ها و گزارش ایندکس (Pages) سرچ کنسول در اختیار نبود. پیشنهاد می‌شود گزارش‌های Pages، Core Web Vitals و Links هم برای مرحله بعد ارسال شوند.</li>
+  <li>بلاگ (<code>blog.novinparsian.com</code>) جزو این پراپرتی سرچ کنسول نیست و به دلیل خطا قابل بررسی نبود.</li>
+  <li>برآورد امتیاز سلامت و پتانسیل رشد، نظر کارشناسی است و تضمین نتیجه نیست.</li>
+</ul>
+<div class="foot">گزارش سئو نوین پارسیان، تهیه‌شده در ۱۸ آبان ۱۴۰۵ بر اساس داده‌های Google Search Console و بررسی فنی مستقیم سایت.</div>
+</div>
+</body>
+</html>
